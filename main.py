@@ -37,10 +37,10 @@ COUNT = 3
 # With this in mind, if a device, like a Raspberry Pi, does not have an onboard camera, the first camera added will be 0
 CAMERA = 0
 
-# START designates whether or not the application is actually 'capturing' meaning that it can be triggered to take
+# Start designates whether or not the application is actually 'capturing' meaning that it can be triggered to take
 # photos and make API calls by either motion or RSSI detection. If set to True, application will start as soon as
 # launched
-START = True
+START = False
 
 params = {
     'fields': [
