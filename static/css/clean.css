@@ -1,0 +1,29 @@
+.option {
+    margin: 20px 0px;
+
+}
+
+.login_menu {
+    margin: 20px 0px;
+}
+.header {
+    padding: 2%;
+}
+
+h3 {
+    text-align: center;
+}
+
+img {
+  border: 5px solid #000;
+}
+
+.front_menu {
+    margin-top: 50px 0px;
+    text-align: center;
+}
+
+body {
+    background-color: #212529;
+    color: #dee2e6;
+}

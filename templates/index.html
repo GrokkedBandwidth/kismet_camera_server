@@ -1,0 +1,59 @@
+{% include "header.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <img src="{{ url_for('video_feed') }}" width="100%">
+            </div>
+            <div class="col-lg-4">
+                <div class="container front_menu">
+                    <div class="col align-self-start">
+                    <a
+                       class="btn btn-primary option"
+                       href="{{ url_for('set_motion_detect') }}">Motion Detection: {{motion}}</a>
+                </div>
+                    <div class="col">
+                    <a
+                       class="btn btn-primary option"
+                       href="{{ url_for('set_grab_aps') }}">Grab APs: {{aps}}</a>
+                </div>
+                    <div class="col">
+                        <form action="/set_rssi" method="post">
+                          <div class="form-group">
+                              <label>Current RSSI: {{rssi}}</label>
+                              <div class="row">
+                                  <div class="col">
+                                    <input type="range" name="range" step="1" min="-99" max="-1" value="{{rssi}}" onchange="rangePrimary.value=value">
+                                    <input type="text" maxlength="1" size="1" id="rangePrimary" value="{{rssi}}"/>
+                                  </div>
+                              </div>
+                              <div class="row">
+                                  <div class="col">
+                                    <button class="btn btn-primary" type="submit">Set RSSI</button>
+                                  </div>
+                              </div>
+                          </div>
+                        </form>
+                    </div>
+                    <div class="col">
+                        {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+         <div class="row option">
+             <div class="col">
+            {% if start == True %}
+            <a
+               class="btn btn-danger"
+               href="{{url_for('start_capture')}}">Stop Capture</a>
+            {% else %}
+            <a
+               class="btn btn-danger"
+               href="{{url_for('start_capture')}}">Start Capture</a>
+            {% endif %}
+         </div>
+        </div>
+    </div>
+</body>
