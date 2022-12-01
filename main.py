@@ -24,7 +24,7 @@ TARGET_RSSI = -37
 # with value 'localhost' or '127.0.0.1'
 USERNAME = 'kismet'
 PASSWORD = 'kismet'
-IP = '192.168.1.167'
+IP = 'localhost'
 
 # COUNT designates how many photos are taken each time the application is triggered to take photos, with a .5 second
 # inbetween each photo
