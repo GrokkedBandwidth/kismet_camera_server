@@ -7,15 +7,40 @@ import csv
 from datetime import datetime as dt
 import cv2
 
+# If MOTION_DETECTION set to True, motion detection will be primary means of application making API calls
+# and storing data. If set to False, application will do an API call every 5 seconds and store and only take
+# photos if a RSSI meets or exceeds TARGET_RSSI
 MOTION_DETECTION = True
+
+# If GRAB_APS is set to True, data will be stored for APs as well as other WiFi devices that exceed TARGET_RSSI
+# by default, set to False to reduce false positives
 GRAB_APS = False
+
+# TARGET_RSSI determines the strength a WiFi device needs to be seen to record into .csv and have a picture taken
+# if MOTION_DETECTION is False. Lowering this value can result in more false positives
 TARGET_RSSI = -37
+
+# The following parameters are for logging into the monitoring Kismet server. Local machine Kismet server can be set
+# with value 'localhost' or '127.0.0.1'
 USERNAME = 'kismet'
 PASSWORD = 'kismet'
 IP = '192.168.1.167'
+
+# COUNT designates how many photos are taken each time the application is triggered to take photos, with a .5 second
+# inbetween each photo
 COUNT = 3
+
+# CAMERA designates which camera to use for the application. Observed behavior for a Surface Pro is below:
+# 0: Front facing camera, if it exists
+# 1: Back facing camera, if it exists
+# 2: Additional cameras
+# With this in mind, if a device, like a Raspberry Pi, does not have an onboard camera, the first camera added will be 0
 CAMERA = 0
-START = False
+
+# START designates whether or not the application is actually 'capturing' meaning that it can be triggered to take
+# photos and make API calls by either motion or RSSI detection. If set to True, application will start as soon as
+# launched
+START = True
 
 params = {
     'fields': [
@@ -164,3 +189,5 @@ def start_capture():
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
+    requests.get(url='http://127.0.0.1:5000/video_feed')
+
