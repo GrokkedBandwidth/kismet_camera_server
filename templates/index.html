@@ -8,28 +8,28 @@
             </div>
             <div class="col-lg-4">
                 <div class="container front_menu">
-                    <div class="col align-self-start">
+                    <div class="col option">
                     <a
                        class="btn btn-primary option"
                        href="{{ url_for('set_motion_detect') }}">Motion Detection: {{motion}}</a>
                 </div>
-                    <div class="col">
+                    <div class="col option">
                     <a
                        class="btn btn-primary option"
                        href="{{ url_for('set_grab_aps') }}">Grab APs: {{aps}}</a>
                 </div>
-                    <div class="col">
+                    <div class="col option">
                         <form action="/set_rssi" method="post">
                           <div class="form-group">
                               <label>Current RSSI: {{rssi}}</label>
-                              <div class="row">
+                              <div class="row option">
                                   <div class="col">
                                     <input type="range" name="range" step="1" min="-99" max="-1" value="{{rssi}}" onchange="rangePrimary.value=value">
                                     <input type="text" maxlength="1" size="1" id="rangePrimary" value="{{rssi}}"/>
                                   </div>
                               </div>
-                              <div class="row">
-                                  <div class="col">
+                              <div class="row option">
+                                  <div class="col option">
                                     <button class="btn btn-primary" type="submit">Set RSSI</button>
                                   </div>
                               </div>

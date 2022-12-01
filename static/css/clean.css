@@ -1,15 +1,12 @@
 .option {
-    margin: 20px 0px;
-
+    padding: 3%;
 }
-
 .login_menu {
     margin: 20px 0px;
 }
 .header {
     padding: 2%;
 }
-
 h3 {
     text-align: center;
 }

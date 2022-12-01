@@ -14,6 +14,7 @@ USERNAME = 'kismet'
 PASSWORD = 'kismet'
 IP = '192.168.1.167'
 COUNT = 3
+CAMERA = 0
 START = False
 
 params = {
@@ -27,7 +28,7 @@ params = {
 
 static_back = None
 motion_list = [None, None]
-cap = cv2.VideoCapture(2)
+cap = cv2.VideoCapture(CAMERA)
 last_api_call = 0
 
 app = Flask(__name__)
