@@ -8,9 +8,9 @@ of a strong RSSI that exceeds the user defined RSSI threshold.
 - python3.8 or greater
 
 ## Installation
-'''
+```
 $ git clone https://github.com/GrokkedBandwidth/kismet_camera_server.git
 $ cd kismet_camera_server/
 $ pip3 install -r requirements.txt
-'''
+```
 
