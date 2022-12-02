@@ -34,7 +34,7 @@ Certain parameters, like motion detection or AP detection can be adjusted within
 ### MOTION_DETECTION
 This constant by default is set to True and can be adjusted in the server once running. If set to True, kismet camera will only take photos and perform an API call when motion is detected within the field of view of the camera. To prevent excessive API calls and photos, the time betweeon motion detection procs is 5 seconds. If set to False, the kismet camera will perform API calls to the local Kismet Server every 5 seconds and if a RSSI is seen that exceeds the RSSI threshold, the camera will take photos and the RSSIs that exceeded threshold will be recorded. 
 
-### GRAB_APS
+#### GRAB_APS
 This constant by default is set to False and can be adjusted in the server once running. If set to True, AP RSSIs that exceed the RSSI threshold will also be recorded, along with other devices. If set to false, AP RSSIs will be ignored.
 
 ### TARGET_RSSI
