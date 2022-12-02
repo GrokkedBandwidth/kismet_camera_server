@@ -78,7 +78,8 @@ alias python3='/usr/local/bin/python3.10'
 ```
 Finally, in the camera server folder:
 ```
-python3 -m pip3 install -r requirements.txt
+python3 -m pip install "picamera[array]"
+python3 -m pip install -r requirements.txt
 ```
 
 
