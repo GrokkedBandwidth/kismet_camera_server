@@ -13,4 +13,23 @@ $ git clone https://github.com/GrokkedBandwidth/kismet_camera_server.git
 $ cd kismet_camera_server/
 $ pip3 install -r requirements.txt
 ```
+## Launching
+```
+$ cd kismet_camera_server/
+$ python3 main.py
+
+```
+To access the server once running navigate to:
+```
+http://127.0.0.1:5000
+OR
+http://<RemoteServerIP>:5000
+
+```
+Once parameters are set, hit 'Start Capture'
+
+## Adjustable Constants
+Certain parameters, like motion detection or AP detection can be adjusted within the server itself, but other constants, like CAMERA and COUNT, need to be accessed in the main.py. Below is a brief description of each constant and where it can be currently accessed:
+
+### MOTION_DETECTION
 
