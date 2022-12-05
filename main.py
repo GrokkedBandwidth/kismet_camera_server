@@ -24,7 +24,7 @@ TARGET_RSSI = -37
 # with value 'localhost' or '127.0.0.1'
 USERNAME = 'kismet'
 PASSWORD = 'kismet'
-IP = 'localhost'
+IP = '192.168.1.167'
 
 # COUNT designates how many photos are taken each time the application is triggered to take photos, with a .5 second
 # inbetween each photo
@@ -41,6 +41,8 @@ CAMERA = 0
 # photos and make API calls by either motion or RSSI detection. If set to True, application will start as soon as
 # launched
 START = False
+
+STREAM = True
 
 params = {
     'fields': [
@@ -128,8 +130,11 @@ def gen_frames():
         else:
             ret, buffer = cv2.imencode('.jpg', frame)
             frame = buffer.tobytes()
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+            if STREAM:
+                yield (b'--frame\r\n'
+                       b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+            else:
+                pass
 
 @app.route('/', methods=['POST', 'GET'])
 def home():
@@ -146,7 +151,8 @@ def home():
                            aps=GRAB_APS,
                            rssi=TARGET_RSSI,
                            form=form,
-                           start=START)
+                           start=START,
+                           stream=STREAM)
 
 @app.route('/video_feed')
 def video_feed():
@@ -185,6 +191,15 @@ def start_capture():
     else:
         START = True
     return redirect(url_for('home', start=START))
+
+@app.route('/start_stream')
+def start_stream():
+    global STREAM
+    if STREAM:
+        STREAM = False
+    else:
+        STREAM = True
+    return redirect(url_for('home', start=STREAM))
 
 
 if __name__ == "__main__":

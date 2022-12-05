@@ -54,6 +54,17 @@
                href="{{url_for('start_capture')}}">Start Capture</a>
             {% endif %}
          </div>
+             <div class="col">
+            {% if stream == True %}
+            <a
+               class="btn btn-danger"
+               href="{{url_for('start_stream')}}">Stop Stream</a>
+            {% else %}
+            <a
+               class="btn btn-danger"
+               href="{{url_for('start_stream')}}">Start Stream</a>
+            {% endif %}
+         </div>
         </div>
     </div>
 </body>
