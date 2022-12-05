@@ -3,10 +3,10 @@
 <body>
     <div class="container">
         <div class="row">
-            <div class="col-lg-8">
+            <div class="col-lg-8 col-md-8">
                 <img src="{{ url_for('video_feed') }}" width="100%">
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-4 col-md-4">
                 <div class="container front_menu">
                     <div class="col option">
                     <a
@@ -42,8 +42,8 @@
                 </div>
             </div>
         </div>
-         <div class="row option">
-             <div class="col">
+         <div class="row">
+             <div class="col option">
             {% if start == True %}
             <a
                class="btn btn-danger"
@@ -53,8 +53,8 @@
                class="btn btn-danger"
                href="{{url_for('start_capture')}}">Start Capture</a>
             {% endif %}
-         </div>
-             <div class="col">
+            </div>
+             <div class="col option">
             {% if stream == True %}
             <a
                class="btn btn-danger"
@@ -64,7 +64,7 @@
                class="btn btn-danger"
                href="{{url_for('start_stream')}}">Start Stream</a>
             {% endif %}
-         </div>
+            </div>
         </div>
     </div>
 </body>
