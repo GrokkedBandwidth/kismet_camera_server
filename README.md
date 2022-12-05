@@ -82,3 +82,6 @@ python3 -m pip install "picamera[array]"
 python3 -m pip install -r requirements.txt
 ```
 This process may take awhile on the opencv-python step
+
+
+
