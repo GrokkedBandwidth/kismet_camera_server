@@ -6,6 +6,7 @@ of a strong RSSI that exceeds the user defined RSSI threshold.
 ## In Action
 <img src="sample.png"/>
 MAC: 8EBF11199C15 at -71 RSSI
+
 ## Dependencies
 - python3.8 or greater
 
