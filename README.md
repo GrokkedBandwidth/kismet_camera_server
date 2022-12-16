@@ -3,7 +3,9 @@
 Kismet Camera Server is designed to be hosted on a remote device to take photos that could potentially correlate to MAC addresses based on user defined RSSI threshold.
 The trigger for the server to take a photo and perform an API call to the locally hosted Kismet Server is either by motion, detected by the camera, or by the existance 
 of a strong RSSI that exceeds the user defined RSSI threshold. 
-
+## In Action
+![](../../../Downloads/20221209_084431_0.png)
+MAC: 8EBF11199C15 at -71 RSSI
 ## Dependencies
 - python3.8 or greater
 
