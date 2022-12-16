@@ -18,13 +18,13 @@ GRAB_APS = False
 
 # TARGET_RSSI determines the strength a WiFi device needs to be seen to record into .csv and have a picture taken
 # if MOTION_DETECTION is False. Lowering this value can result in more false positives
-TARGET_RSSI = -37
+TARGET_RSSI = -50
 
 # The following parameters are for logging into the monitoring Kismet server. Local machine Kismet server can be set
 # with value 'localhost' or '127.0.0.1'
 USERNAME = 'kismet'
 PASSWORD = 'kismet'
-IP = '192.168.1.167'
+IP = 'localhost'
 
 # COUNT designates how many photos are taken each time the application is triggered to take photos, with a .5 second
 # inbetween each photo
@@ -43,6 +43,8 @@ CAMERA = 0
 START = False
 
 STREAM = True
+
+SENSITIVITY = 5000
 
 params = {
     'fields': [
@@ -113,16 +115,16 @@ def gen_frames():
                 cnts, _ = cv2.findContours(thresh_frame.copy(),
                                            cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
                 for contour in cnts:
-                    if cv2.contourArea(contour) < 15000:
+                    if cv2.contourArea(contour) < SENSITIVITY:
                         continue
                     motion = 1
                     (x, y, w, h) = cv2.boundingRect(contour)
                     cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 3)
-                    if time.time() > 5 + last_api_call:
+                    if time.time() > 2.5 + last_api_call:
                         last_api_call = time.time()
                         api_call()
             else:
-                if time.time() > 5 + last_api_call:
+                if time.time() > 2.5 + last_api_call:
                     last_api_call = time.time()
                     api_call()
         if not check:
