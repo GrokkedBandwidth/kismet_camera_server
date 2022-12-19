@@ -42,8 +42,13 @@ CAMERA = 0
 # launched
 START = False
 
+# STREAM determines whether the camera feed is live when the server is accessed. This constant does not impact capture
+# meaning that even when STREAM is False, the camera server will behave as normal when capturing.
 STREAM = True
 
+# SENSITIVITY dictates the size of an object or distance of an object from the camera to trigger motion detection. This constant will
+# need to be altered and tested before employment depending on the distance your target spot is from your sensor. A value
+# of 10000 will set off motion detection when waving a hand in front of a webcam.
 SENSITIVITY = 5000
 
 params = {

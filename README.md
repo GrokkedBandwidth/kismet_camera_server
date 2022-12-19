@@ -8,7 +8,8 @@ of a strong RSSI that exceeds the user defined RSSI threshold.
 MAC: 8EBF11199C15 at -71 RSSI
 
 ## Dependencies
-- python3.8 or greater
+- python3
+- Kismet
 
 ## Installation
 
@@ -78,8 +79,17 @@ CAMERA designates which camera to use for the application. Observed behavior for
 With this in mind, if a device, like a Raspberry Pi, does not have an onboard camera, the first camera added will be 0
 
 #### START
-Start designates whether or not the application is actually 'capturing' meaning that it can be triggered to take photos and make API calls by either motion or RSSI detection. If set to True, application will start as soon as launched
+START designates whether or not the application is actually 'capturing' meaning that it can be triggered to take photos
+and make API calls by either motion or RSSI detection. If set to True, application will start as soon as launched
 
+#### STREAM
+STREAM determines whether the camera feed is live when the server is accessed. This constant does not impact capture
+meaning that even when STREAM is False, the camera server will behave as normal when capturing. 
+
+#### SENSITIVITY
+SENSITIVITY dictates the size of an object or distance of an object from the camera to trigger motion detection. This constant will
+need to be altered and tested before employment depending on the distance your target spot is from your sensor. A value
+of 10000 will set off motion detection when waving a hand in front of a webcam.
 
 
 
