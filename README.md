@@ -5,7 +5,7 @@ The trigger for the server to take a photo and perform an API call to the locall
 of a strong RSSI that exceeds the user defined RSSI threshold. 
 ## In Action
 <img src="sample.png"/>
-MAC: 8EBF11199C15 at -71 RSSI
+MAC: 8EBF11199C15 at -71 RSSI (Thanks PB for the help)
 
 ## Dependencies
 - python3
@@ -37,6 +37,8 @@ $ git clone https://github.com/GrokkedBandwidth/kismet_camera_server.git
 $ cd kismet_camera_server/
 $ pip3 install -r requirements.txt
 ```
+Thanks to Sam Westby Tech for figuring out how to get opencv working on Raspberry Pi
+https://www.youtube.com/watch?v=QzVYnG-WaM4&ab_channel=SamWestbyTech
 
 ## Launching
 ```
