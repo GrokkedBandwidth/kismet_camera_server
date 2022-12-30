@@ -18,7 +18,7 @@ GRAB_APS = False
 
 # TARGET_RSSI determines the strength a WiFi device needs to be seen to record into .csv and have a picture taken
 # if MOTION_DETECTION is False. Lowering this value can result in more false positives
-TARGET_RSSI = -50
+TARGET_RSSI = -72
 
 # The following parameters are for logging into the monitoring Kismet server. Local machine Kismet server can be set
 # with value 'localhost' or '127.0.0.1'
@@ -50,6 +50,10 @@ STREAM = True
 # need to be altered and tested before employment depending on the distance your target spot is from your sensor. A value
 # of 10000 will set off motion detection when waving a hand in front of a webcam.
 SENSITIVITY = 5000
+
+# ROTATION is an integer variable that designates the rotation of the camera image as well as the images that are taken
+# when the camera is triggered. Default is 0
+ROTATION = 0
 
 params = {
     'fields': [
@@ -94,7 +98,14 @@ def api_call():
         name = f'{dt.now().strftime("%Y%m%d_%H%M%S")}'
         for num in range(0, COUNT):
             result, image = cap.read()
-            cv2.imwrite(f'images/{name}_{num}.png', image)
+            if ROTATION == 0:
+                cv2.imwrite(f'images/{name}_{num}.png', image)
+            elif ROTATION == 90:
+                cv2.imwrite(f'images/{name}_{num}.png', cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE))
+            elif ROTATION == 180:
+                cv2.imwrite(f'images/{name}_{num}.png', cv2.rotate(image, cv2.ROTATE_180))
+            elif ROTATION == 270:
+                cv2.imwrite(f'images/{name}_{num}.png', cv2.rotate(image, cv2.ROTATE_90_COUNTERCLOCKWISE))
             time.sleep(.5)
         with open(f'Possible MAC List_{dt.now().strftime("%Y%m%d")}.csv', mode="a", encoding='utf8') as mac_deck:
             writer = csv.writer(mac_deck)
@@ -135,7 +146,14 @@ def gen_frames():
         if not check:
             break
         else:
-            ret, buffer = cv2.imencode('.jpg', frame)
+            if ROTATION == 0:
+                ret, buffer = cv2.imencode('.jpg', frame)
+            elif ROTATION == 90:
+                ret, buffer = cv2.imencode('.jpg', cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE))
+            elif ROTATION == 180:
+                ret, buffer = cv2.imencode('.jpg', cv2.rotate(frame, cv2.ROTATE_180))
+            elif ROTATION == 270:
+                ret, buffer = cv2.imencode('.jpg', cv2.rotate(frame, cv2.ROTATE_90_COUNTERCLOCKWISE))
             frame = buffer.tobytes()
             if STREAM:
                 yield (b'--frame\r\n'
@@ -159,7 +177,8 @@ def home():
                            rssi=TARGET_RSSI,
                            form=form,
                            start=START,
-                           stream=STREAM)
+                           stream=STREAM,
+                           rotaiton=ROTATION)
 
 @app.route('/video_feed')
 def video_feed():
@@ -186,7 +205,7 @@ def set_grab_aps():
 @app.route('/set_rssi', methods=['POST'])
 def set_rssi():
     global TARGET_RSSI
-    rssi = request.form['range']
+    rssi = request.form['text']
     TARGET_RSSI = int(rssi)
     return redirect(url_for('home', rssi=TARGET_RSSI))
 
@@ -207,6 +226,19 @@ def start_stream():
     else:
         STREAM = True
     return redirect(url_for('home', start=STREAM))
+
+@app.route('/rotate', methods=['POST', 'GET'])
+def rotate():
+    global ROTATION
+    if ROTATION == 0:
+        ROTATION = 90
+    elif ROTATION == 90:
+        ROTATION = 180
+    elif ROTATION == 180:
+        ROTATION = 270
+    elif ROTATION == 270:
+        ROTATION = 0
+    return redirect(url_for('home', rotation=ROTATION))
 
 
 if __name__ == "__main__":
