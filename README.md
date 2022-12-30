@@ -93,7 +93,7 @@ of 10000 will set off motion detection when waving a hand in front of a webcam.
 
 #### ROTATION 
 ROTATION is an integer variable that designates the rotation of the camera image as well as the images that are taken
-when the camera is triggered. Default is 0 
+when the camera is triggered. Default is 0 and can be set to 0, 90, 180, and 270. Degrees are rotated clockwise.
 
 
 
