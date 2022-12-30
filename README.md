@@ -91,7 +91,8 @@ SENSITIVITY dictates the size of an object or distance of an object from the cam
 need to be altered and tested before employment depending on the distance your target spot is from your sensor. A value
 of 10000 will set off motion detection when waving a hand in front of a webcam.
 
-#### ROTATION is an integer variable that designates the rotation of the camera image as well as the images that are taken
+#### ROTATION 
+ROTATION is an integer variable that designates the rotation of the camera image as well as the images that are taken
 when the camera is triggered. Default is 0 
 
 
