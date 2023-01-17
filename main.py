@@ -24,7 +24,7 @@ TARGET_RSSI = -72
 # with value 'localhost' or '127.0.0.1'
 USERNAME = 'kismet'
 PASSWORD = 'kismet'
-IP = 'localhost'
+IP = '192.168.1.167'
 
 # COUNT designates how many photos are taken each time the application is triggered to take photos, with a .5 second
 # inbetween each photo
@@ -180,6 +180,11 @@ def home():
                            stream=STREAM,
                            rotaiton=ROTATION)
 
+@app.route('/options')
+def options():
+    return render_template('options.html')
+
+
 @app.route('/video_feed')
 def video_feed():
     return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
@@ -230,15 +235,26 @@ def start_stream():
 @app.route('/rotate', methods=['POST', 'GET'])
 def rotate():
     global ROTATION
-    if ROTATION == 0:
-        ROTATION = 90
-    elif ROTATION == 90:
-        ROTATION = 180
-    elif ROTATION == 180:
-        ROTATION = 270
-    elif ROTATION == 270:
+    if ROTATION < 270:
+        ROTATION += 90
+    else:
         ROTATION = 0
     return redirect(url_for('home', rotation=ROTATION))
+
+@app.route('/manual', methods=['GET'])
+def manual_photo():
+    result, image = cap.read()
+    if ROTATION == 0:
+        cv2.imwrite(f'images/{dt.now().strftime("%Y%m%d%H%M%S")}_ManualPhoto.png', image)
+    elif ROTATION == 90:
+        cv2.imwrite(f'images/{dt.now().strftime("%Y%m%d%H%M%S")}_ManualPhoto.png', cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE))
+    elif ROTATION == 180:
+        cv2.imwrite(f'images/{dt.now().strftime("%Y%m%d%H%M%S")}_ManualPhoto.png', cv2.rotate(image, cv2.ROTATE_180))
+    elif ROTATION == 270:
+        cv2.imwrite(f'images/{dt.now().strftime("%Y%m%d%H%M%S")}_ManualPhoto.png', cv2.rotate(image, cv2.ROTATE_90_COUNTERCLOCKWISE))
+    return redirect(url_for('home'))
+
+
 
 
 if __name__ == "__main__":

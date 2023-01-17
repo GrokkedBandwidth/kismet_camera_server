@@ -3,7 +3,7 @@
 <body>
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 col-md-8">
+            <div class="col">
                 <img src="{{ url_for('video_feed') }}">
             </div>
             <div class="col-lg-4 col-md-4">
@@ -58,6 +58,11 @@
                  <a
                class="btn btn-primary"
                href="{{url_for('rotate')}}">Rotate Clockwise</a>
+             </div>
+             <div class="col option">
+                 <a
+               class="btn btn-primary"
+               href="{{url_for('manual_photo')}}">Take Photo</a>
              </div>
              <div class="col option">
             {% if stream == True %}

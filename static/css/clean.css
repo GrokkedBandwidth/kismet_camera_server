@@ -14,10 +14,9 @@ h3 {
 img {
   border: 5px solid #000;
   width: auto;
-  height: auto;
+  height: auto%;
   max-width: 1200px;
   max-height: 1200px;
-
 }
 
 .front_menu {
