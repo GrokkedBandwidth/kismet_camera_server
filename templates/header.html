@@ -7,12 +7,27 @@
   <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
   <!-- Custom fonts for this template -->
   <link href="{{ url_for('static', filename='css/clean.css')}}" rel="stylesheet">
+  <script src="{{ url_for('static', filename='js/bootstrap.min.js')}}"> </script>
 </head>
-<body class="header">
-  {% if start == True %}
-  <h3>Kismet Control Hub (Capturing)</h3>
-  {% else %}
-  <h3>Kismet Control Hub</h3>
-  {% endif %}
-
-</body>
+<nav class="navbar header navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    {% if start == True %}
+    <a class="navbar-brand" href="{{url_for('home')}}">Kismet Camera Server (Capturing)</a>
+    {% else %}
+    <a class="navbar-brand" href="{{url_for('home')}}">Kismet Camera Server</a>
+    {% endif %}
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown"
+            aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="{{url_for('options')}}" role="button">
+            Options
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -46,9 +46,9 @@ START = False
 # meaning that even when STREAM is False, the camera server will behave as normal when capturing.
 STREAM = True
 
-# SENSITIVITY dictates the size of an object or distance of an object from the camera to trigger motion detection. This constant will
-# need to be altered and tested before employment depending on the distance your target spot is from your sensor. A value
-# of 10000 will set off motion detection when waving a hand in front of a webcam.
+# SENSITIVITY dictates the size of an object or distance of an object from the camera to trigger motion detection.
+# This constant will need to be altered and tested before employment depending on the distance your target spot is from
+# your sensor. A value of 10000 will set off motion detection when waving a hand in front of a webcam.
 SENSITIVITY = 5000
 
 # ROTATION is an integer variable that designates the rotation of the camera image as well as the images that are taken
@@ -182,7 +182,10 @@ def home():
 
 @app.route('/options')
 def options():
-    return render_template('options.html')
+    return render_template('options.html',
+                           count=COUNT,
+                           camera=CAMERA,
+                           sensitivity=SENSITIVITY)
 
 
 @app.route('/video_feed')
@@ -214,6 +217,12 @@ def set_rssi():
     TARGET_RSSI = int(rssi)
     return redirect(url_for('home', rssi=TARGET_RSSI))
 
+@app.route('/set_sensitivity', methods=['POST'])
+def set_sensitivity():
+    global SENSITIVITY
+    SENSITIVITY = int(request.form['sensitivity'])
+    return redirect(url_for('options', sensitivity=SENSITIVITY))
+
 @app.route('/start_capture')
 def start_capture():
     global START
@@ -232,6 +241,19 @@ def start_stream():
         STREAM = True
     return redirect(url_for('home', start=STREAM))
 
+@app.route('/set_count', methods=['POST'])
+def set_count():
+    global COUNT
+    COUNT = int(request.form['count'])
+    return redirect(url_for('options', count=COUNT))
+
+@app.route('/set_camera', methods=['POST'])
+def set_camera():
+    global CAMERA
+    CAMERA = request.form['camera']
+    return redirect(url_for('options', camera=CAMERA))
+
+
 @app.route('/rotate', methods=['POST', 'GET'])
 def rotate():
     global ROTATION
@@ -247,14 +269,15 @@ def manual_photo():
     if ROTATION == 0:
         cv2.imwrite(f'images/{dt.now().strftime("%Y%m%d%H%M%S")}_ManualPhoto.png', image)
     elif ROTATION == 90:
-        cv2.imwrite(f'images/{dt.now().strftime("%Y%m%d%H%M%S")}_ManualPhoto.png', cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE))
+        cv2.imwrite(f'images/{dt.now().strftime("%Y%m%d%H%M%S")}_ManualPhoto.png',
+                    cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE))
     elif ROTATION == 180:
-        cv2.imwrite(f'images/{dt.now().strftime("%Y%m%d%H%M%S")}_ManualPhoto.png', cv2.rotate(image, cv2.ROTATE_180))
+        cv2.imwrite(f'images/{dt.now().strftime("%Y%m%d%H%M%S")}_ManualPhoto.png',
+                    cv2.rotate(image, cv2.ROTATE_180))
     elif ROTATION == 270:
-        cv2.imwrite(f'images/{dt.now().strftime("%Y%m%d%H%M%S")}_ManualPhoto.png', cv2.rotate(image, cv2.ROTATE_90_COUNTERCLOCKWISE))
+        cv2.imwrite(f'images/{dt.now().strftime("%Y%m%d%H%M%S")}_ManualPhoto.png',
+                    cv2.rotate(image, cv2.ROTATE_90_COUNTERCLOCKWISE))
     return redirect(url_for('home'))
-
-
 
 
 if __name__ == "__main__":

@@ -1,0 +1,52 @@
+{% include "header.html" %}
+<html>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-4">
+                <div class="col option">
+                    <form action="/set_count" method="post">
+                        <input type="text" name='count' maxlength="1" size="1" id="count"/>
+                        <p> Current: {{count}}</p>
+                        <button class="btn btn-primary option" type="submit">Set Count</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-8 col-md-8">
+                <div class="col option">
+                    <p>Count dictates how many photos are taken per trigger. Default value is 3</p>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-lg-4 col-md-4">
+                <form action="/set_sensitivity" method="post">
+                          <div class="form-group">
+                              <label>Current Sensitivity: {{sensitivity}}</label>
+                              <div class="row option">
+                                  <div class="col">
+                                    <input type="range" name="range" step="100" min="0" max="10000" value="{{sensitivity}}"
+                                           onchange="rangePrimarySens.value=value" style='width: 200px;'>
+                                    <input type="text" name='sensitivity' maxlength="5" size="1" id="rangePrimarySens"
+                                           value="{{sensitivity}}"/>
+                                  </div>
+                              </div>
+                              <div class="row option">
+                                  <div class="col option">
+                                    <button class="btn btn-primary" type="submit">Set Sensitivity</button>
+                                  </div>
+                              </div>
+                          </div>
+                </form>
+            </div>
+            <div class="col-lg-8 col-md-8">
+                <div class="col option">
+                    <p>Sensitivity modifies the range in which motion detection is triggered. The higher the value,
+                    the more insensitive the sensor is for detecting motion.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
