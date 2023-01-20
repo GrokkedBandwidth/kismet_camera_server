@@ -25,7 +25,7 @@ TARGET_RSSI = -72
 # with value 'localhost' or '127.0.0.1'
 USERNAME = 'kismet'
 PASSWORD = 'kismet'
-IP = '192.168.1.167'
+IP = 'localhost'
 
 # COUNT designates how many photos are taken each time the application is triggered to take photos, with a .5 second
 # inbetween each photo
@@ -103,15 +103,15 @@ def api_call():
         for num in range(0, COUNT):
             result, image = cap.read()
             if ROTATION == 0:
-                cv2.imwrite(f'images/{name}_{num}.png', image)
+                cv2.imwrite(f'{IMAGE_DIRECTORY}/{name}_{num}.png', image)
             elif ROTATION == 90:
-                cv2.imwrite(f'images/{name}_{num}.png', cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE))
+                cv2.imwrite(f'{IMAGE_DIRECTORY}/{name}_{num}.png', cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE))
             elif ROTATION == 180:
-                cv2.imwrite(f'images/{name}_{num}.png', cv2.rotate(image, cv2.ROTATE_180))
+                cv2.imwrite(f'{IMAGE_DIRECTORY}/{name}_{num}.png', cv2.rotate(image, cv2.ROTATE_180))
             elif ROTATION == 270:
-                cv2.imwrite(f'images/{name}_{num}.png', cv2.rotate(image, cv2.ROTATE_90_COUNTERCLOCKWISE))
+                cv2.imwrite(f'{IMAGE_DIRECTORY}/{name}_{num}.png', cv2.rotate(image, cv2.ROTATE_90_COUNTERCLOCKWISE))
             time.sleep(.5)
-        with open(f'images/MAC List_{dt.now().strftime("%Y%m%d")}.csv', mode="a", encoding='utf8') as mac_deck:
+        with open(f'{IMAGE_DIRECTORY}/MAC List_{dt.now().strftime("%Y%m%d")}.csv', mode="a", encoding='utf8') as mac_deck:
             writer = csv.writer(mac_deck)
             for item in mac_list:
                 item.append(name)
@@ -195,14 +195,12 @@ def options():
 def downloads():
     filelist = []
     for file in os.listdir(IMAGE_DIRECTORY):
-        print(file)
-        print(type(file))
         filelist.append(file)
-    return render_template('download.html', filelist=filelist, dir=IMAGE_DIRECTORY)
+    return render_template('download.html', filelist=filelist)
 
 @app.route('/downloads/<path:filename>', methods=['GET', 'POST'])
 def download_file(filename):
-    path = f'images/{filename}'
+    path = f'{IMAGE_DIRECTORY}/{filename}'
     return send_file(path_or_file=path, as_attachment=True)
 
 
@@ -285,15 +283,15 @@ def rotate():
 def manual_photo():
     result, image = cap.read()
     if ROTATION == 0:
-        cv2.imwrite(f'images/{dt.now().strftime("%Y%m%d%H%M%S")}_ManualPhoto.png', image)
+        cv2.imwrite(f'{IMAGE_DIRECTORY}/{dt.now().strftime("%Y%m%d%H%M%S")}_ManualPhoto.png', image)
     elif ROTATION == 90:
-        cv2.imwrite(f'images/{dt.now().strftime("%Y%m%d%H%M%S")}_ManualPhoto.png',
+        cv2.imwrite(f'{IMAGE_DIRECTORY}/{dt.now().strftime("%Y%m%d%H%M%S")}_ManualPhoto.png',
                     cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE))
     elif ROTATION == 180:
-        cv2.imwrite(f'images/{dt.now().strftime("%Y%m%d%H%M%S")}_ManualPhoto.png',
+        cv2.imwrite(f'{IMAGE_DIRECTORY}/{dt.now().strftime("%Y%m%d%H%M%S")}_ManualPhoto.png',
                     cv2.rotate(image, cv2.ROTATE_180))
     elif ROTATION == 270:
-        cv2.imwrite(f'images/{dt.now().strftime("%Y%m%d%H%M%S")}_ManualPhoto.png',
+        cv2.imwrite(f'{IMAGE_DIRECTORY}/{dt.now().strftime("%Y%m%d%H%M%S")}_ManualPhoto.png',
                     cv2.rotate(image, cv2.ROTATE_90_COUNTERCLOCKWISE))
     return redirect(url_for('home'))
 
