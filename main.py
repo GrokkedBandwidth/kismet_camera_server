@@ -1,11 +1,12 @@
-from flask import Flask, render_template, Response, redirect, url_for, request
+from flask import Flask, render_template, Response, redirect, url_for, request, send_from_directory, send_file
 from flask_bootstrap import Bootstrap
 from forms import CreateKismetForm
+from datetime import datetime as dt
 import requests
 import time
 import csv
-from datetime import datetime as dt
 import cv2
+import os
 
 # If MOTION_DETECTION set to True, motion detection will be primary means of application making API calls
 # and storing data. If set to False, application will do an API call every 5 seconds and store and only take
@@ -54,6 +55,9 @@ SENSITIVITY = 5000
 # ROTATION is an integer variable that designates the rotation of the camera image as well as the images that are taken
 # when the camera is triggered. Default is 0
 ROTATION = 0
+
+#
+IMAGE_DIRECTORY = 'images'
 
 params = {
     'fields': [
@@ -107,7 +111,7 @@ def api_call():
             elif ROTATION == 270:
                 cv2.imwrite(f'images/{name}_{num}.png', cv2.rotate(image, cv2.ROTATE_90_COUNTERCLOCKWISE))
             time.sleep(.5)
-        with open(f'Possible MAC List_{dt.now().strftime("%Y%m%d")}.csv', mode="a", encoding='utf8') as mac_deck:
+        with open(f'images/MAC List_{dt.now().strftime("%Y%m%d")}.csv', mode="a", encoding='utf8') as mac_deck:
             writer = csv.writer(mac_deck)
             for item in mac_list:
                 item.append(name)
@@ -186,6 +190,20 @@ def options():
                            count=COUNT,
                            camera=CAMERA,
                            sensitivity=SENSITIVITY)
+
+@app.route('/downloads')
+def downloads():
+    filelist = []
+    for file in os.listdir(IMAGE_DIRECTORY):
+        print(file)
+        print(type(file))
+        filelist.append(file)
+    return render_template('download.html', filelist=filelist, dir=IMAGE_DIRECTORY)
+
+@app.route('/downloads/<path:filename>', methods=['GET', 'POST'])
+def download_file(filename):
+    path = f'images/{filename}'
+    return send_file(path_or_file=path, as_attachment=True)
 
 
 @app.route('/video_feed')
