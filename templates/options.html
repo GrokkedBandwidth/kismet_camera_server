@@ -1,14 +1,16 @@
 {% include "header.html" %}
 <html>
 <body>
+<h3 class="title_header">Options</h3>
     <div class="container">
+
         <div class="row">
             <div class="col-lg-4 col-md-4">
                 <div class="col option">
                     <form action="/set_count" method="post">
                         <input type="text" name='count' maxlength="1" size="1" id="count"/>
                         <p> Current: {{count}}</p>
-                        <button class="btn btn-primary option" type="submit">Set Count</button>
+                        <button class="btn btn-primary" type="submit">Set Count</button>
                     </form>
                 </div>
             </div>

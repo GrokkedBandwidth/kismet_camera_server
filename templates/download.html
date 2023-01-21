@@ -1,8 +1,32 @@
 {% include "header.html" %}
+<h3 class="title_header">Downloads</h3>
+<hr>
 <div class="container">
+    <div class="row option">
+        <div class="col-8"></div>
+        <div class="col-lg-2 col-md-2 col-sm-2">
+            <a class="btn btn-primary" href="{{url_for('download_all')}}">Download All</a>
+        </div>
+         <div class="col-lg-2 col-md-2 col-sm-2">
+            <a class="btn btn-danger" href="{{url_for('delete_all')}}">Delete All</a>
+        </div>
+    </div>
+    <hr>
     {% for item in filelist %}
     <div class="row">
-        <a href="{{ url_for('download_file', filename=item)}}">{{item}}</a>
+        <div class="col-lg-3 col-md-3 col-sm-6 download_option">
+            <p>{{item}}</p>
+        </div>
+        <div class="col-lg-5 col-md-5 col-sm-6">
+            <img src="{{url_for('preview', filename=item)}}" width="150" height="150"/>
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-6">
+            <a class="btn btn-primary btn-sm download_option" href="{{ url_for('download_file', filename=item)}}">Download</a>
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-6">
+            <a class="btn btn-danger btn-sm download_option" href="{{url_for('delete', filename=item)}}">Delete</a>
+        </div>
     </div>
+    <hr>
     {% endfor %}
 </div>

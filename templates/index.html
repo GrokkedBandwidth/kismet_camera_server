@@ -3,19 +3,19 @@
 <body>
     <div class="container">
         <div class="row">
-            <div class="col">
+            <div class="col-lg-8 col-md-6 col-sm-12">
                 <img src="{{ url_for('video_feed') }}">
             </div>
-            <div class="col-lg-4 col-md-4">
+            <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="container front_menu">
                     <div class="col option">
                     <a
-                       class="btn btn-primary option"
+                       class="btn btn-outline-light"
                        href="{{ url_for('set_motion_detect') }}">Motion Detection: {{motion}}</a>
                 </div>
                     <div class="col option">
                     <a
-                       class="btn btn-primary option"
+                       class="btn btn-outline-light"
                        href="{{ url_for('set_grab_aps') }}">Grab APs: {{aps}}</a>
                 </div>
                     <div class="col option">
@@ -29,15 +29,15 @@
                                   </div>
                               </div>
                               <div class="row option">
-                                  <div class="col option">
-                                    <button class="btn btn-primary" type="submit">Set RSSI</button>
+                                  <div class="col">
+                                    <button class="btn btn-outline-light" type="submit">Set RSSI</button>
                                   </div>
                               </div>
                           </div>
                         </form>
                     </div>
                     <div class="col">
-                        {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+                        {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "outline-light"}) }}
                     </div>
                 </div>
             </div>
@@ -46,32 +46,32 @@
              <div class="col option">
             {% if start == True %}
             <a
-               class="btn btn-danger"
+               class="btn btn-outline-danger"
                href="{{url_for('start_capture')}}">Stop Capture</a>
             {% else %}
             <a
-               class="btn btn-danger"
+               class="btn btn-outline-danger"
                href="{{url_for('start_capture')}}">Start Capture</a>
             {% endif %}
             </div>
              <div class="col option">
                  <a
-               class="btn btn-primary"
+               class="btn btn-outline-light"
                href="{{url_for('rotate')}}">Rotate Clockwise</a>
              </div>
              <div class="col option">
                  <a
-               class="btn btn-primary"
+               class="btn btn-outline-light"
                href="{{url_for('manual_photo')}}">Take Photo</a>
              </div>
              <div class="col option">
             {% if stream == True %}
             <a
-               class="btn btn-danger"
+               class="btn btn-outline-danger"
                href="{{url_for('start_stream')}}">Stop Stream</a>
             {% else %}
             <a
-               class="btn btn-danger"
+               class="btn btn-outline-danger"
                href="{{url_for('start_stream')}}">Start Stream</a>
             {% endif %}
             </div>

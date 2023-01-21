@@ -9,12 +9,12 @@
   <link href="{{ url_for('static', filename='css/clean.css')}}" rel="stylesheet">
   <script src="{{ url_for('static', filename='js/bootstrap.min.js')}}"> </script>
 </head>
-<nav class="navbar header navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
     {% if start == True %}
-    <a class="navbar-brand" href="{{url_for('home')}}">Kismet Camera Server (Capturing)</a>
+    <a class="navbar-brand header" href="{{url_for('home')}}">Kismet Camera Server (Capturing)</a>
     {% else %}
-    <a class="navbar-brand" href="{{url_for('home')}}">Kismet Camera Server</a>
+    <a class="navbar-brand header" href="{{url_for('home')}}">Kismet Camera Server</a>
     {% endif %}
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown"
             aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">

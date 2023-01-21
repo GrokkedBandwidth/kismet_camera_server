@@ -1,7 +1,8 @@
-from flask import Flask, render_template, Response, redirect, url_for, request, send_from_directory, send_file
+from flask import Flask, render_template, Response, redirect, url_for, request, send_file
 from flask_bootstrap import Bootstrap
 from forms import CreateKismetForm
 from datetime import datetime as dt
+import zipfile
 import requests
 import time
 import csv
@@ -75,6 +76,7 @@ last_api_call = 0
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'isdbnfgsijdgnkljang9248921ubpfjna0u32nf30qip'
+app.config['IMAGES'] = IMAGE_DIRECTORY
 Bootstrap(app)
 
 def api_call():
@@ -202,6 +204,39 @@ def downloads():
 def download_file(filename):
     path = f'{IMAGE_DIRECTORY}/{filename}'
     return send_file(path_or_file=path, as_attachment=True)
+
+@app.route('/downloads/preview/<path:filename>', methods=['GET', 'POST'])
+def preview(filename):
+    path = f'{IMAGE_DIRECTORY}/{filename}'
+    return send_file(path_or_file=path, mimetype='image/jpeg')
+
+@app.route('/downloads/delete/<path:filename>', methods=['GET', 'POST'])
+def delete(filename):
+    path = f'{IMAGE_DIRECTORY}/{filename}'
+    os.remove(path)
+    return redirect(url_for('downloads'))
+
+@app.route('/downloads/download_all', methods=['GET', 'POST'])
+def download_all():
+    filename = f'Extract_{dt.now().strftime("%Y%m%d_%H%M%S")}.zip'
+    with zipfile.ZipFile(filename, mode='w') as archive:
+        for file in os.listdir(IMAGE_DIRECTORY):
+            archive.write(f'{IMAGE_DIRECTORY}/{file}')
+    return send_file(path_or_file=filename, as_attachment=True)
+
+@app.route('/downloads/delete_all', methods=['GET', 'POST'])
+def delete_all():
+    for file in os.listdir(IMAGE_DIRECTORY):
+        os.remove(f'{IMAGE_DIRECTORY}/{file}')
+    return redirect(url_for('downloads'))
+
+
+
+
+
+
+
+
 
 
 @app.route('/video_feed')
