@@ -12,7 +12,7 @@ import os
 # If MOTION_DETECTION set to True, motion detection will be primary means of application making API calls
 # and storing data. If set to False, application will do an API call every 5 seconds and store and only take
 # photos if a RSSI meets or exceeds TARGET_RSSI
-MOTION_DETECTION = True
+MOTION_DETECTION = False
 
 # If GRAB_APS is set to True, data will be stored for APs as well as other WiFi devices that exceed TARGET_RSSI
 # by default, set to False to reduce false positives
@@ -169,29 +169,32 @@ def gen_frames():
 
 @app.route('/', methods=['POST', 'GET'])
 def home():
-    global USERNAME, PASSWORD
-    form = CreateKismetForm()
-    form.username.render_kw = {'placeholder': USERNAME}
-    form.password.render_kw = {'placeholder': PASSWORD}
-    if form.validate_on_submit():
-        USERNAME = form.username.data
-        PASSWORD = form.password.data
-        return redirect(url_for('home'))
     return render_template('index.html',
                            motion=MOTION_DETECTION,
                            aps=GRAB_APS,
                            rssi=TARGET_RSSI,
-                           form=form,
                            start=START,
                            stream=STREAM,
                            rotaiton=ROTATION)
 
-@app.route('/options')
+@app.route('/options', methods=['GET', 'POST'])
 def options():
+    global USERNAME, PASSWORD
+    form = CreateKismetForm()
+    form.username.render_kw = {'placeholder': f'Current Username: {USERNAME}'}
+    form.password.render_kw = {'placeholder': f'Current Password: {PASSWORD}'}
+    if form.validate_on_submit():
+        USERNAME = form.username.data
+        PASSWORD = form.password.data
+        return redirect(url_for('options'))
     return render_template('options.html',
                            count=COUNT,
+                           form=form,
                            camera=CAMERA,
-                           sensitivity=SENSITIVITY)
+                           rssi=TARGET_RSSI,
+                           motion=MOTION_DETECTION,
+                           aps=GRAB_APS,
+                           sensitivity=SENSITIVITY,)
 
 @app.route('/downloads')
 def downloads():
@@ -230,15 +233,6 @@ def delete_all():
         os.remove(f'{IMAGE_DIRECTORY}/{file}')
     return redirect(url_for('downloads'))
 
-
-
-
-
-
-
-
-
-
 @app.route('/video_feed')
 def video_feed():
     return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
@@ -250,7 +244,7 @@ def set_motion_detect():
         MOTION_DETECTION = False
     else:
         MOTION_DETECTION = True
-    return redirect(url_for('home', motion=MOTION_DETECTION))
+    return redirect(url_for('options', motion=MOTION_DETECTION))
 
 @app.route('/set_grab_aps')
 def set_grab_aps():
@@ -259,14 +253,14 @@ def set_grab_aps():
         GRAB_APS = False
     else:
         GRAB_APS = True
-    return redirect(url_for('home', aps=GRAB_APS))
+    return redirect(url_for('options', aps=GRAB_APS))
 
 @app.route('/set_rssi', methods=['POST'])
 def set_rssi():
     global TARGET_RSSI
     rssi = request.form['text']
     TARGET_RSSI = int(rssi)
-    return redirect(url_for('home', rssi=TARGET_RSSI))
+    return redirect(url_for('options', rssi=TARGET_RSSI))
 
 @app.route('/set_sensitivity', methods=['POST'])
 def set_sensitivity():
@@ -303,7 +297,6 @@ def set_camera():
     global CAMERA
     CAMERA = request.form['camera']
     return redirect(url_for('options', camera=CAMERA))
-
 
 @app.route('/rotate', methods=['POST', 'GET'])
 def rotate():

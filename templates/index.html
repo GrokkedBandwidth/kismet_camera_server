@@ -3,78 +3,64 @@
 <body>
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 col-md-6 col-sm-12">
+            <div class="col-3 title_header">
+                <h6>Motion Detection: {{motion}}</h6>
+            </div>
+            <div class="col-3 title_header">
+                <h6>AP Detection: {{aps}}</h6>
+            </div>
+            <div class="col-3 title_header">
+                <h6>Current RSSI: {{rssi}}</h6>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-9">
                 <img src="{{ url_for('video_feed') }}">
             </div>
-            <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="col-lg-3">
                 <div class="container front_menu">
-                    <div class="col option">
-                    <a
-                       class="btn btn-outline-light"
-                       href="{{ url_for('set_motion_detect') }}">Motion Detection: {{motion}}</a>
-                </div>
-                    <div class="col option">
-                    <a
-                       class="btn btn-outline-light"
-                       href="{{ url_for('set_grab_aps') }}">Grab APs: {{aps}}</a>
-                </div>
-                    <div class="col option">
-                        <form action="/set_rssi" method="post">
-                          <div class="form-group">
-                              <label>Current RSSI: {{rssi}}</label>
-                              <div class="row option">
-                                  <div class="col">
-                                    <input type="range" name="range" step="1" min="-99" max="-1" value="{{rssi}}" onchange="rangePrimary.value=value" style='width: 200px;'>
-                                    <input type="text" name='text' maxlength="3" size="1" id="rangePrimary" value="{{rssi}}"/>
-                                  </div>
-                              </div>
-                              <div class="row option">
-                                  <div class="col">
-                                    <button class="btn btn-outline-light" type="submit">Set RSSI</button>
-                                  </div>
-                              </div>
-                          </div>
-                        </form>
+                    <div class="col front_menu_option">
+                        {% if start == True %}
+                        <a
+                           class="btn btn-outline-danger"
+                           href="{{url_for('start_capture')}}">Stop Capture
+                        </a>
+                        {% else %}
+                        <a
+                           class="btn btn-outline-danger"
+                           href="{{url_for('start_capture')}}">Start Capture
+                        </a>
+                        {% endif %}
                     </div>
-                    <div class="col">
-                        {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "outline-light"}) }}
+                    <div class="col front_menu_option">
+                        {% if stream == True %}
+                        <a
+                           class="btn btn-outline-danger"
+                           href="{{url_for('start_stream')}}">Stop Stream
+                        </a>
+                        {% else %}
+                        <a
+                           class="btn btn-outline-danger"
+                           href="{{url_for('start_stream')}}">Start Stream
+                        </a>
+                        {% endif %}
+                    </div>
+                    <div class="col front_menu_option">
+                        <a
+                           class="btn btn-outline-light"
+                           href="{{url_for('rotate')}}">Rotate Clockwise
+                        </a>
+                    </div>
+                    <div class="col front_menu_option">
+                        <a
+                           class="btn btn-outline-light"
+                           href="{{url_for('manual_photo')}}">Take Photo
+                        </a>
+
                     </div>
                 </div>
             </div>
         </div>
-         <div class="row">
-             <div class="col option">
-            {% if start == True %}
-            <a
-               class="btn btn-outline-danger"
-               href="{{url_for('start_capture')}}">Stop Capture</a>
-            {% else %}
-            <a
-               class="btn btn-outline-danger"
-               href="{{url_for('start_capture')}}">Start Capture</a>
-            {% endif %}
-            </div>
-             <div class="col option">
-                 <a
-               class="btn btn-outline-light"
-               href="{{url_for('rotate')}}">Rotate Clockwise</a>
-             </div>
-             <div class="col option">
-                 <a
-               class="btn btn-outline-light"
-               href="{{url_for('manual_photo')}}">Take Photo</a>
-             </div>
-             <div class="col option">
-            {% if stream == True %}
-            <a
-               class="btn btn-outline-danger"
-               href="{{url_for('start_stream')}}">Stop Stream</a>
-            {% else %}
-            <a
-               class="btn btn-outline-danger"
-               href="{{url_for('start_stream')}}">Start Stream</a>
-            {% endif %}
-            </div>
-        </div>
+
     </div>
 </body>

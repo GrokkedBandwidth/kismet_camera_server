@@ -1,9 +1,91 @@
 {% include "header.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 <html>
 <body>
 <h3 class="title_header">Options</h3>
     <div class="container">
-
+        <div class="row">
+            <div class="col-lg-4 col-md-4">
+                <div class="col option">
+                     <a
+                       class="btn btn-primary"
+                       href="{{ url_for('set_motion_detect') }}">Motion Detection: {{motion}}</a>
+                </div>
+            </div>
+            <div class="col-lg-8 col-md-8">
+                <div class="col option">
+                    <p>Set to enable/disable motion detection triggering. If enabled, motion detection will be the
+                    primary mechanism for triggering a Kismet pull, regardless of the strength of any nearby RSSI.
+                    If set to false, any RSSI breaking the RSSI threshold will be the trigger for taking photos and
+                    recording MACs. Motion detection needs the sensitivity option adjusted depending on distance of
+                    sensor from photographed location. Use at your own risk</p>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-lg-4 col-md-4">
+                <div class="col option">
+                    <a
+                       class="btn btn-primary"
+                       href="{{ url_for('set_grab_aps') }}">Grab APs: {{aps}}</a>
+                </div>
+            </div>
+            <div class="col-lg-8 col-md-8">
+                <div class="col option">
+                    <p>Set to enable/disable Access Point (AP) detection. If enabled, AP RSSI's will be considered and
+                    added to recorded MACs. Disable if there is a strong AP near sensor that continuously forces
+                    the sensor to trigger.</p>
+                </div>
+            </div>
+        </div>
+        <hr>
+         <div class="row">
+            <div class="col-lg-4 col-md-4">
+                <div class="col option">
+                     <form action="/set_rssi" method="post">
+                          <div class="form-group">
+                              <label>Current RSSI: {{rssi}}</label>
+                              <div class="row">
+                                  <div class="col option">
+                                    <input type="range" name="range" step="1" min="-99" max="-1" value="{{rssi}}" onchange="rangePrimary.value=value" style='width: 200px;'>
+                                    <input type="text" name='text' maxlength="3" size="1" id="rangePrimary" value="{{rssi}}"/>
+                                  </div>
+                              </div>
+                              <div class="row">
+                                  <div class="col option">
+                                    <button class="btn btn-primary" type="submit">Set RSSI</button>
+                                  </div>
+                              </div>
+                          </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-8 col-md-8">
+                <div class="col option">
+                    <p>Received Signal Strength Indicator (RSSI) Threshold designates the minimum strength a device must
+                    be seen at for it to be recorded in recorded MACs and to trigger a pull from Kismet. Lower values
+                    of RSSI (more negative) will result in false positive results. Adjust based on the environment
+                    around the sensor.</p>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-lg-4 col-md-4">
+                <div class="col option">
+                        {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+                </div>
+            </div>
+            <div class="col-lg-8 col-md-8">
+                <div class="col option">
+                    <p>By default, Kismet username and password is set to kismet kismet. If username and password to
+                    access Kismet is different than this, enter new username and password before pressing 'Start
+                        Capture'.</p>
+                </div>
+            </div>
+        </div>
+        <hr>
         <div class="row">
             <div class="col-lg-4 col-md-4">
                 <div class="col option">
@@ -26,7 +108,7 @@
                 <form action="/set_sensitivity" method="post">
                           <div class="form-group">
                               <label>Current Sensitivity: {{sensitivity}}</label>
-                              <div class="row option">
+                              <div class="row">
                                   <div class="col">
                                     <input type="range" name="range" step="100" min="0" max="10000" value="{{sensitivity}}"
                                            onchange="rangePrimarySens.value=value" style='width: 200px;'>
@@ -34,7 +116,7 @@
                                            value="{{sensitivity}}"/>
                                   </div>
                               </div>
-                              <div class="row option">
+                              <div class="row">
                                   <div class="col option">
                                     <button class="btn btn-primary" type="submit">Set Sensitivity</button>
                                   </div>
@@ -44,8 +126,9 @@
             </div>
             <div class="col-lg-8 col-md-8">
                 <div class="col option">
-                    <p>Sensitivity modifies the range in which motion detection is triggered. The higher the value,
-                    the more insensitive the sensor is for detecting motion.</p>
+                    <p>Sensitivity modifies the range in which motion detection is triggered. The lower the value,
+                    the more sensitive the sensor is for detecting motion. A value of 10000 is the value needed to
+                    trigger motion detection of a normal laptop-attached web-cam with a person in front of it.</p>
                 </div>
             </div>
         </div>
