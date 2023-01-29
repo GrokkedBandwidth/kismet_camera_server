@@ -8,57 +8,26 @@ import time
 import csv
 import cv2
 import os
+import resolution_check
+import constants
 
-# If MOTION_DETECTION set to True, motion detection will be primary means of application making API calls
-# and storing data. If set to False, application will do an API call every 5 seconds and store and only take
-# photos if a RSSI meets or exceeds TARGET_RSSI
-MOTION_DETECTION = False
+# Adjust constants inside of constants.py
+MOTION_DETECTION = constants.MOTION_DETECTION
+GRAB_APS = constants.GRAB_APS
+TARGET_RSSI = constants.TARGET_RSSI
+USERNAME = constants.USERNAME
+PASSWORD = constants.PASSWORD
+IP = constants.IP
+COUNT = constants.COUNT
+CAMERA = constants.CAMERA
+START = constants.START
+STREAM = constants.STREAM
+SENSITIVITY = constants.SENSITIVITY
+ROTATION = constants.ROTATION
+IMAGE_DIRECTORY = constants.IMAGE_DIRECTORY
 
-# If GRAB_APS is set to True, data will be stored for APs as well as other WiFi devices that exceed TARGET_RSSI
-# by default, set to False to reduce false positives
-GRAB_APS = False
-
-# TARGET_RSSI determines the strength a WiFi device needs to be seen to record into .csv and have a picture taken
-# if MOTION_DETECTION is False. Lowering this value can result in more false positives
-TARGET_RSSI = -72
-
-# The following parameters are for logging into the monitoring Kismet server. Local machine Kismet server can be set
-# with value 'localhost' or '127.0.0.1'
-USERNAME = 'kismet'
-PASSWORD = 'kismet'
-IP = 'localhost'
-
-# COUNT designates how many photos are taken each time the application is triggered to take photos, with a .5 second
-# inbetween each photo
-COUNT = 3
-
-# CAMERA designates which camera to use for the application. Observed behavior for a Surface Pro is below:
-# 0: Front facing camera, if it exists
-# 1: Back facing camera, if it exists
-# 2: Additional cameras
-# With this in mind, if a device, like a Raspberry Pi, does not have an onboard camera, the first camera added will be 0
-CAMERA = 0
-
-# Start designates whether or not the application is actually 'capturing' meaning that it can be triggered to take
-# photos and make API calls by either motion or RSSI detection. If set to True, application will start as soon as
-# launched
-START = False
-
-# STREAM determines whether the camera feed is live when the server is accessed. This constant does not impact capture
-# meaning that even when STREAM is False, the camera server will behave as normal when capturing.
-STREAM = True
-
-# SENSITIVITY dictates the size of an object or distance of an object from the camera to trigger motion detection.
-# This constant will need to be altered and tested before employment depending on the distance your target spot is from
-# your sensor. A value of 10000 will set off motion detection when waving a hand in front of a webcam.
-SENSITIVITY = 5000
-
-# ROTATION is an integer variable that designates the rotation of the camera image as well as the images that are taken
-# when the camera is triggered. Default is 0
-ROTATION = 0
-
-#
-IMAGE_DIRECTORY = 'images'
+WIDTH = 640
+HEIGHT = 480
 
 params = {
     'fields': [
@@ -68,6 +37,8 @@ params = {
         "kismet.device.base.last_time"
     ]
 }
+working_resolutions = resolution_check.check_resolution()
+print(working_resolutions)
 
 static_back = None
 motion_list = [None, None]
@@ -104,6 +75,7 @@ def api_call():
         name = f'{dt.now().strftime("%Y%m%d_%H%M%S")}'
         for num in range(0, COUNT):
             result, image = cap.read()
+            image = cv2.resize(image, (WIDTH, HEIGHT))
             if ROTATION == 0:
                 cv2.imwrite(f'{IMAGE_DIRECTORY}/{name}_{num}.png', image)
             elif ROTATION == 90:
@@ -112,7 +84,7 @@ def api_call():
                 cv2.imwrite(f'{IMAGE_DIRECTORY}/{name}_{num}.png', cv2.rotate(image, cv2.ROTATE_180))
             elif ROTATION == 270:
                 cv2.imwrite(f'{IMAGE_DIRECTORY}/{name}_{num}.png', cv2.rotate(image, cv2.ROTATE_90_COUNTERCLOCKWISE))
-            time.sleep(.5)
+            time.sleep(.25)
         with open(f'{IMAGE_DIRECTORY}/MAC List_{dt.now().strftime("%Y%m%d")}.csv', mode="a", encoding='utf8') as mac_deck:
             writer = csv.writer(mac_deck)
             for item in mac_list:
@@ -169,13 +141,16 @@ def gen_frames():
 
 @app.route('/', methods=['POST', 'GET'])
 def home():
+    resolution = f'{WIDTH} x {HEIGHT}'
     return render_template('index.html',
                            motion=MOTION_DETECTION,
                            aps=GRAB_APS,
                            rssi=TARGET_RSSI,
                            start=START,
                            stream=STREAM,
-                           rotaiton=ROTATION)
+                           rotation=ROTATION,
+                           resolutions=working_resolutions,
+                           resolution=resolution)
 
 @app.route('/options', methods=['GET', 'POST'])
 def options():
@@ -268,6 +243,15 @@ def set_sensitivity():
     SENSITIVITY = int(request.form['sensitivity'])
     return redirect(url_for('options', sensitivity=SENSITIVITY))
 
+@app.route('/set_resolution/<resolution>', methods=['GET'])
+def set_resolution(resolution):
+    global WIDTH, HEIGHT
+    WIDTH = int(resolution.split()[0].split('.')[0])
+    HEIGHT = int(resolution.split()[2].split('.')[0])
+    # cap.set(cv2.CAP_PROP_FRAME_WIDTH, WIDTH)
+    # cap.set(cv2.CAP_PROP_FRAME_HEIGHT, HEIGHT)
+    return redirect(url_for('home'))
+
 @app.route('/start_capture')
 def start_capture():
     global START
@@ -310,6 +294,7 @@ def rotate():
 @app.route('/manual', methods=['GET'])
 def manual_photo():
     result, image = cap.read()
+    image = cv2.resize(image, (WIDTH, HEIGHT))
     if ROTATION == 0:
         cv2.imwrite(f'{IMAGE_DIRECTORY}/{dt.now().strftime("%Y%m%d%H%M%S")}_ManualPhoto.png', image)
     elif ROTATION == 90:

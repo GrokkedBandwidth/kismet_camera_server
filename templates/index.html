@@ -12,12 +12,25 @@
             <div class="col-3 title_header">
                 <h6>Current RSSI: {{rssi}}</h6>
             </div>
+            <div class="col-3 title_header">
+                <h6>Current Resolution: {{ resolution }}</h6>
+            </div>
         </div>
         <div class="row">
-            <div class="col-lg-9">
-                <img src="{{ url_for('video_feed') }}">
+            <div class="col-lg-2 col-md-2 col-sm-2">
+            {% for item in resolutions %}
+                <div class="col resolution_option">
+                    <a
+                       class="btn btn-outline-light btn-sm"
+                       href="{{ url_for('set_resolution', resolution=item) }}">{{item}}
+                    </a>
+                </div>
+            {% endfor %}
             </div>
-            <div class="col-lg-3">
+            <div class="col-lg-8 col-md-8 col-sm-2">
+                <img src="{{ url_for('video_feed') }}" class="object-fit-scale border rounded">
+            </div>
+            <div class="col-lg-2">
                 <div class="container front_menu">
                     <div class="col front_menu_option">
                         {% if start == True %}

@@ -1,6 +1,9 @@
 .option {
     padding: 3%;
 }
+.resolution_option {
+    padding-bottom: 5%;
+}
 .download_option {
     margin-top: 50px;
 }
@@ -25,8 +28,7 @@ img {
   border: 5px solid #000;
   width: auto;
   height: auto%;
-  max-width: 1200px;
-  max-height: 1200px;
+  max-width: 100%;
 }
 
 .front_menu {
