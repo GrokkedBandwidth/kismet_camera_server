@@ -13,7 +13,7 @@ MAC: 8EBF11199C15 at -71 RSSI (Thanks PB for the help)
 
 ## Installation
 
-### Ubuntu 20.04
+### Ubuntu 20.04/22.04
 
 ```
 $ git clone https://github.com/GrokkedBandwidth/kismet_camera_server.git
@@ -52,6 +52,28 @@ OR
 http://<RemoteServerIP>:5000
 ```
 Once parameters are set, hit 'Start Capture'
+
+## Manual
+
+### Change Resolution
+
+On the home page, there is a change resolution option that populates based on the camera that was selected in constants.py.
+The chosen resolution will only change the resolution of the photos taken and will not affect the resolution of the 
+streamed footage. This is to save on the users bandwidth
+
+### Start/Stop Capture
+
+This button controls whether kismet camera is 'running', meaning that if on, kismet camera will take photos and 
+conduct API calls to Kismet. When off, kismet camera will not take photos.
+
+### Start/Stop Stream
+
+This button controls the video feed to the webpage. This does not impact taking photos with kismet camera and is only
+implemented to save bandwidth for the user.
+
+### Take Photo
+
+This button takes a photo of the current image in the video feed. This does not cause kismet camera to conduct an API call
 
 ## Adjustable Constants
 Certain parameters, like motion detection or AP detection can be adjusted within the server itself, but other constants, like CAMERA and COUNT, need to be accessed in the main.py. Below is a brief description of each constant and where it can be currently accessed:
