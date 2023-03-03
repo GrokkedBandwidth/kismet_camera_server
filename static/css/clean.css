@@ -49,3 +49,15 @@ body {
     margin-bottom: 10px;
 
 }
+
+th {
+    color: #dee2e6;
+    text-align: center;
+
+}
+
+td {
+    color: #dee2e6;
+    text-align: center;
+    vertical-align: middle;
+}
