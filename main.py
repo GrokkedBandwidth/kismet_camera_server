@@ -26,6 +26,7 @@ SENSITIVITY = constants.SENSITIVITY
 ROTATION = constants.ROTATION
 IMAGE_DIRECTORY = constants.IMAGE_DIRECTORY
 
+SORT = 'up'
 WIDTH = 640
 HEIGHT = 480
 
@@ -173,11 +174,16 @@ def options():
 
 @app.route('/downloads')
 def downloads():
+    global SORT
     filelist = []
     for file in os.listdir(IMAGE_DIRECTORY):
         filelist.append(file)
     filelist.sort()
-    filelist.reverse()
+    if SORT == 'up':
+        SORT = 'down'
+        filelist.reverse()
+    else:
+        SORT = 'up'
     return render_template('download.html', filelist=filelist)
 
 @app.route('/downloads/<path:filename>', methods=['GET', 'POST'])
