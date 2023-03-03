@@ -176,6 +176,8 @@ def downloads():
     filelist = []
     for file in os.listdir(IMAGE_DIRECTORY):
         filelist.append(file)
+    filelist.sort()
+    filelist.reverse()
     return render_template('download.html', filelist=filelist)
 
 @app.route('/downloads/<path:filename>', methods=['GET', 'POST'])
