@@ -1,4 +1,5 @@
 from flask import Flask, render_template, Response, redirect, url_for, request, send_file
+from flask_paginate import Pagination
 from flask_bootstrap import Bootstrap
 from forms import CreateKismetForm
 from datetime import datetime as dt
@@ -26,7 +27,6 @@ SENSITIVITY = constants.SENSITIVITY
 ROTATION = constants.ROTATION
 IMAGE_DIRECTORY = constants.IMAGE_DIRECTORY
 
-SORT = 'up'
 WIDTH = 640
 HEIGHT = 480
 
@@ -174,17 +174,20 @@ def options():
 
 @app.route('/downloads')
 def downloads():
-    global SORT
+    page = int(request.args.get('page', 1))
+    per_page = 5
+    offset = (page - 1) * per_page
     filelist = []
     for file in os.listdir(IMAGE_DIRECTORY):
         filelist.append(file)
     filelist.sort()
-    if SORT == 'up':
-        SORT = 'down'
-        filelist.reverse()
-    else:
-        SORT = 'up'
-    return render_template('download.html', filelist=filelist)
+    filelist.reverse()
+    items = filelist[offset:offset+per_page]
+    pagination = Pagination(page=page, per_page=per_page, offset=offset, total=len(filelist),
+                            record_name='filelist')
+    return render_template('download.html',
+                           filelist=items,
+                           pagination=pagination)
 
 @app.route('/downloads/<path:filename>', methods=['GET', 'POST'])
 def download_file(filename):
