@@ -287,12 +287,13 @@ def set_count():
     COUNT = int(request.form['count'])
     return redirect(url_for('options', count=COUNT))
 
-# @app.route('/set_camera', methods=['POST', 'GET'])
-# def set_camera():
-#     global CAMERA, cap
-#     CAMERA = request.form['camera']
-#     cap = cv2.VideoCapture(CAMERA)
-#     return redirect(url_for('options', camera=CAMERA))
+@app.route('/set_camera', methods=['POST', 'GET'])
+def set_camera():
+    global CAMERA, cap
+    cv2.destroyAllWindows()
+    CAMERA = int(request.form['camera'])
+    cap = cv2.VideoCapture(CAMERA)
+    return redirect(url_for('options', camera=CAMERA))
 
 @app.route('/rotate', methods=['POST', 'GET'])
 def rotate():
@@ -323,4 +324,3 @@ def manual_photo():
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
-

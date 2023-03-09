@@ -7,6 +7,42 @@
         <div class="row">
             <div class="col-lg-4 col-md-4">
                 <div class="col option">
+
+                    <form action="/set_camera" method="post">
+                          <div class="form-group">
+                              <label>Current Camera: {{camera}}</label>
+                              <div class="row">
+                                  <div class="col option">
+                                    <input type="text" name='camera' maxlength="1" size="1" value="{{camera}}"/>
+                                  </div>
+                              </div>
+                              <div class="row">
+                                  <div class="col option">
+                                    <button class="btn btn-primary" type="submit">Set Camera</button>
+                                  </div>
+                              </div>
+                          </div>
+                    </form>
+
+                </div>
+            </div>
+            <div class="col-lg-8 col-md-8">
+                <div class="col option">
+                    <p>Each camera attached to the camera server is assigned an integer value, starting from zero, and
+                    assigned in order of attachment to the operating system. For a laptop with built in front and back
+                    camera, the following values reflect the default behavior for camera assignment:</p>
+                    <p>0: Front facing camera</p>
+                    <p>1: Rear facing camera</p>
+                    <p>2+: Any additional attached cameras</p>
+                    <p>On Raspberry Pi, this value should remain zero unless more than one camera is in use.</p>
+                </div>
+            </div>
+        </div>
+        <hr>
+
+        <div class="row">
+            <div class="col-lg-4 col-md-4">
+                <div class="col option">
                      <a
                        class="btn btn-primary"
                        href="{{ url_for('set_motion_detect') }}">Motion Detection: {{motion}}</a>
