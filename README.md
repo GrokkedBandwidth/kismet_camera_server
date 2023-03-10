@@ -5,6 +5,7 @@ The trigger for the server to take a photo and perform an API call to the locall
 of a strong RSSI that exceeds the user defined RSSI threshold. 
 ## In Action
 ![sample](https://user-images.githubusercontent.com/96986202/224189962-66aab5da-538c-4a4c-8aad-963e7832b949.png)
+
 MAC: 8EBF11199C15 at -71 RSSI (Thanks PB for the help)
 
 ## Dependencies
