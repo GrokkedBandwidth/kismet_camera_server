@@ -55,7 +55,8 @@ http://<RemoteServerIP>:5000
 Once parameters are set, hit 'Start Capture'
 
 ## Manual
-![Kismet_Camera](https://user-images.githubusercontent.com/96986202/224191103-a6f7cd3c-822a-48a9-aed8-32ab98b0d5e4.png)
+![Kismet_Camera](https://user-images.githubusercontent.com/96986202/224191269-9a92ecdf-7111-4c9c-934f-65ecbdc1dd3b.png)
+
 
 ### Change Resolution
 
