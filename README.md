@@ -56,6 +56,8 @@ Once parameters are set, hit 'Start Capture'
 
 ## Manual
 
+![Kismet_Camera](https://user-images.githubusercontent.com/96986202/224191345-f133ac89-6f41-44f9-9850-0e134727f307.png)
+
 ### Change Resolution
 
 On the home page, there is a change resolution option that populates based on the camera that was selected in constants.py.
