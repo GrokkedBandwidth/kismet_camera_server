@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LINE=$(sed '/START/q' main.py | wc -l)
+LINE=$(sed '/START/q' constants.py | wc -l)
 sed -i -e $LINE"s/False/True/" main.py
 
 sleep 1
