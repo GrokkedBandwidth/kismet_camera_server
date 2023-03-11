@@ -3,9 +3,9 @@ import constants
 
 working_resolutions = {}
 
-def check_resolution():
+def check_resolution(camera):
     with open('resources/supported_resolutions.csv', mode='r') as file:
-        cap = cv2.VideoCapture(constants.CAMERA)
+        cap = cv2.VideoCapture(camera)
         for item in file:
             row = item.strip().split()
             width = int(row[0])

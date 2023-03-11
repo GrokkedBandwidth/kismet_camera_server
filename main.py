@@ -38,8 +38,8 @@ params = {
         "kismet.device.base.last_time"
     ]
 }
-working_resolutions = resolution_check.check_resolution()
-print(working_resolutions)
+# working_resolutions = resolution_check.check_resolution()
+# print(working_resolutions)
 
 static_back = None
 motion_list = [None, None]
@@ -143,6 +143,7 @@ def gen_frames():
 @app.route('/', methods=['POST', 'GET'])
 def home():
     resolution = f'{WIDTH} x {HEIGHT}'
+    working_resolutions = resolution_check.check_resolution(CAMERA)
     return render_template('index.html',
                            motion=MOTION_DETECTION,
                            aps=GRAB_APS,
@@ -309,15 +310,15 @@ def manual_photo():
     result, image = cap.read()
     image = cv2.resize(image, (WIDTH, HEIGHT))
     if ROTATION == 0:
-        cv2.imwrite(f'{IMAGE_DIRECTORY}/{dt.now().strftime("%Y%m%d%H%M%S")}_ManualPhoto.png', image)
+        cv2.imwrite(f'{IMAGE_DIRECTORY}/{dt.now().strftime("%Y%m%d_%H%M%S")}_ManualPhoto.png', image)
     elif ROTATION == 90:
-        cv2.imwrite(f'{IMAGE_DIRECTORY}/{dt.now().strftime("%Y%m%d%H%M%S")}_ManualPhoto.png',
+        cv2.imwrite(f'{IMAGE_DIRECTORY}/{dt.now().strftime("%Y%m%d_%H%M%S")}_ManualPhoto.png',
                     cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE))
     elif ROTATION == 180:
-        cv2.imwrite(f'{IMAGE_DIRECTORY}/{dt.now().strftime("%Y%m%d%H%M%S")}_ManualPhoto.png',
+        cv2.imwrite(f'{IMAGE_DIRECTORY}/{dt.now().strftime("%Y%m%d_%H%M%S")}_ManualPhoto.png',
                     cv2.rotate(image, cv2.ROTATE_180))
     elif ROTATION == 270:
-        cv2.imwrite(f'{IMAGE_DIRECTORY}/{dt.now().strftime("%Y%m%d%H%M%S")}_ManualPhoto.png',
+        cv2.imwrite(f'{IMAGE_DIRECTORY}/{dt.now().strftime("%Y%m%d_%H%M%S")}_ManualPhoto.png',
                     cv2.rotate(image, cv2.ROTATE_90_COUNTERCLOCKWISE))
     return redirect(url_for('home'))
 
