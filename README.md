@@ -17,28 +17,29 @@ MAC: 8EBF11199C15 at -71 RSSI (Thanks PB for the help)
 ### Ubuntu 20.04/22.04
 
 ```
-$ git clone https://github.com/GrokkedBandwidth/kismet_camera_server.git
-$ cd kismet_camera_server/
-$ pip3 install -r requirements.txt
+git clone https://github.com/GrokkedBandwidth/kismet_camera_server.git
+cd kismet_camera_server/
+pip3 install -r requirements.txt
 ```
 
 ### Raspbian (Buster)
 
 ```
-$ sudo apt update
-$ sudo apt upgrade -y
-$ sudo apt install -y build-essential cmake pkg-config libjpeg-dev libtiff5-dev libpng-dev libavcodec-dev libavformat-dev
+sudo apt update
+sudo apt upgrade -y
+sudo apt install -y build-essential cmake pkg-config libjpeg-dev libtiff5-dev libpng-dev libavcodec-dev libavformat-dev
 libswscale-dev libv4l-dev libxvidcore-dev libx264-dev libfontconfig1-dev libcairo2-dev libgdk-pixbuf2.0-dev
 libpango1.0-dev libgtk2.0-dev libgtk-3-dev libatlas-base-dev gfortran libhdf5-dev libhdf5-serial-dev libhdf5-103
 libqt5gui5 libqt5webkit5 libqt5test5 python3-pyqt5 python3-dev libreadline-gplv2-dev libncursesw5-dev libssl-dev
 libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libgtkmm-3.0-1 libnotify4 libcblas-dev libhdf5-dev
 libhdf5-serial-dev libatlas-base-dev libjasper-dev libqtgui4 libqt4-test libatlas-base-dev libhdf5-dev
-$ pip3 install -U numpy
-$ git clone https://github.com/GrokkedBandwidth/kismet_camera_server.git
-$ cd kismet_camera_server/
-$ pip3 install -r requirements.txt
+pip3 install -U numpy
+git clone https://github.com/GrokkedBandwidth/kismet_camera_server.git
+cd kismet_camera_server/
+pip3 install -r requirements.txt
 ```
-Thanks to Sam Westby Tech for figuring out how to get opencv working on Raspberry Pi
+Sometimes the dependency libatlas-base-dev will not install properly on first go.
+Thanks to Sam Westby Tech for figuring out how to get opencv working on Raspberry Pi.
 https://www.youtube.com/watch?v=QzVYnG-WaM4&ab_channel=SamWestbyTech
 
 ## Launching
