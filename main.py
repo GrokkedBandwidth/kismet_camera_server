@@ -38,9 +38,8 @@ params = {
         "kismet.device.base.last_time"
     ]
 }
-# working_resolutions = resolution_check.check_resolution()
-# print(working_resolutions)
 
+working_resolutions = resolution_check.check_resolution(CAMERA)
 static_back = None
 motion_list = [None, None]
 cap = cv2.VideoCapture(CAMERA)
@@ -143,7 +142,6 @@ def gen_frames():
 @app.route('/', methods=['POST', 'GET'])
 def home():
     resolution = f'{WIDTH} x {HEIGHT}'
-    working_resolutions = resolution_check.check_resolution(CAMERA)
     return render_template('index.html',
                            motion=MOTION_DETECTION,
                            aps=GRAB_APS,
@@ -176,7 +174,7 @@ def options():
 @app.route('/downloads')
 def downloads():
     page = int(request.args.get('page', 1))
-    per_page = 5
+    per_page = 10
     offset = (page - 1) * per_page
     filelist = []
     for file in os.listdir(IMAGE_DIRECTORY):
@@ -290,10 +288,13 @@ def set_count():
 
 @app.route('/set_camera', methods=['POST', 'GET'])
 def set_camera():
-    global CAMERA, cap
+    global CAMERA, cap, working_resolutions, WIDTH, HEIGHT
     cv2.destroyAllWindows()
     CAMERA = int(request.form['camera'])
+    working_resolutions = resolution_check.check_resolution(CAMERA)
     cap = cv2.VideoCapture(CAMERA)
+    WIDTH = 640
+    HEIGHT = 480
     return redirect(url_for('options', camera=CAMERA))
 
 @app.route('/rotate', methods=['POST', 'GET'])
