@@ -55,6 +55,10 @@ http://<RemoteServerIP>:5000
 ```
 Once parameters are set, hit 'Start Capture'
 
+## Triggers
+
+![Kismet_Camera drawio (3)](https://user-images.githubusercontent.com/96986202/231572465-ac10659a-e9ed-4406-8044-7b4c32a1ccec.png)
+
 ## Manual
 
 ![Kismet_Camera](https://user-images.githubusercontent.com/96986202/224191345-f133ac89-6f41-44f9-9850-0e134727f307.png)
