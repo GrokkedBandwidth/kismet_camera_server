@@ -27,7 +27,7 @@ h3 {
 img {
   border: 5px solid #000;
   width: auto;
-  height: auto%;
+  height: auto;
   max-width: 100%;
 }
 
@@ -133,4 +133,3 @@ td {
     --bs-code-color: #e685b5;
     --bs-border-color: #495057;
     --bs-border-color-translucent: rgba(255, 255, 255, 0.15);
-}
