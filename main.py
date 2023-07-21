@@ -9,24 +9,6 @@ import cv2
 import os
 from camera import Camera
 
-# Adjust constants inside of constants.py
-# MOTION_DETECTION = constants.MOTION_DETECTION
-# GRAB_APS = constants.GRAB_APS
-# TARGET_RSSI = constants.TARGET_RSSI
-# USERNAME = constants.USERNAME
-# PASSWORD = constants.PASSWORD
-# IP = constants.IP
-# COUNT = constants.COUNT
-# CAMERA = constants.CAMERA
-# START = constants.START
-# STREAM = constants.STREAM
-# SENSITIVITY = constants.SENSITIVITY
-# ROTATION = constants.ROTATION
-# IMAGE_DIRECTORY = constants.IMAGE_DIRECTORY
-
-# WIDTH = 640
-# HEIGHT = 480
-
 params = {
     'fields': [
         "kismet.device.base.signal/kismet.common.signal.last_signal",
@@ -38,55 +20,10 @@ params = {
 
 camera = Camera()
 camera.check_resolution()
-# motion_list = [None, None]
-# cap = cv2.VideoCapture(camera.camera)
-# last_api_call = 0
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'isdbnfgsijdgnkljang9248921ubpfjna0u32nf30qip'
 app.config['IMAGES'] = camera.image_dir
 Bootstrap(app)
-
-# def api_call():
-#     if GRAB_APS:
-#         aps = ''
-#     else:
-#         aps = 'Wi-Fi AP'
-#     results = requests.post(
-#         url=f"http://{USERNAME}:{PASSWORD}@{IP}:2501/devices/views/phy-IEEE802.11/devices.json",
-#         json=params).json()
-#     mac_list = []
-#     rssi_above_target = False
-#     for item in results:
-#         rssi = int(item['kismet.common.signal.last_signal'])
-#         last_seen_time = item["kismet.device.base.last_time"]
-#         if rssi >= TARGET_RSSI \
-#                 and rssi != 0 \
-#                 and item['kismet.device.base.type'] != aps \
-#                 and time.time() - last_seen_time <= 30:
-#             rssi_above_target = True
-#             mac = item['kismet.device.base.macaddr'].replace(':', '')
-#             device_type = item['kismet.device.base.type']
-#             mac_list.append([mac, device_type, rssi])
-#     if rssi_above_target:
-#         name = f'{dt.now().strftime("%Y%m%d_%H%M%S")}'
-#         for num in range(0, COUNT):
-#             result, image = cap.read()
-#             image = cv2.resize(image, (WIDTH, HEIGHT))
-#             if ROTATION == 0:
-#                 cv2.imwrite(f'{IMAGE_DIRECTORY}/{name}_{num}.png', image)
-#             elif ROTATION == 90:
-#                 cv2.imwrite(f'{IMAGE_DIRECTORY}/{name}_{num}.png', cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE))
-#             elif ROTATION == 180:
-#                 cv2.imwrite(f'{IMAGE_DIRECTORY}/{name}_{num}.png', cv2.rotate(image, cv2.ROTATE_180))
-#             elif ROTATION == 270:
-#                 cv2.imwrite(f'{IMAGE_DIRECTORY}/{name}_{num}.png', cv2.rotate(image, cv2.ROTATE_90_COUNTERCLOCKWISE))
-#             time.sleep(.25)
-#         with open(f'{IMAGE_DIRECTORY}/MAC List_{dt.now().strftime("%Y%m%d")}.csv', mode="a", encoding='utf8') as mac_deck:
-#             writer = csv.writer(mac_deck)
-#             for item in mac_list:
-#                 item.append(name)
-#                 writer.writerow(item)
 
 def gen_frames():
     while True:
@@ -115,7 +52,7 @@ def gen_frames():
                         camera.api_call()
             else:
                 if time.time() > 2.5 + camera.last_api_call:
-                    last_api_call = time.time()
+                    camera.last_api_call = time.time()
                     camera.api_call()
         if not check:
             break
