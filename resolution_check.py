@@ -1,5 +1,4 @@
 import cv2
-import constants
 
 def check_resolution(camera):
     working_resolutions = {}
