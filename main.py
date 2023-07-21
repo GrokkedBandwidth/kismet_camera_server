@@ -9,15 +9,6 @@ import cv2
 import os
 from camera import Camera
 
-params = {
-    'fields': [
-        "kismet.device.base.signal/kismet.common.signal.last_signal",
-        "kismet.device.base.macaddr",
-        "kismet.device.base.type",
-        "kismet.device.base.last_time"
-    ]
-}
-
 camera = Camera()
 camera.check_resolution()
 app = Flask(__name__)
@@ -180,8 +171,8 @@ def set_sensitivity():
 def set_resolution(resolution):
     camera.width = int(resolution.split()[0].split('.')[0])
     camera.height = int(resolution.split()[2].split('.')[0])
-    # cap.set(cv2.CAP_PROP_FRAME_WIDTH, WIDTH)
-    # cap.set(cv2.CAP_PROP_FRAME_HEIGHT, HEIGHT)
+    # camera.cap.set(cv2.CAP_PROP_FRAME_WIDTH, camera.width)
+    # camera.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, camera.height)
     return redirect(url_for('home'))
 
 @app.route('/start_capture')
