@@ -61,6 +61,12 @@ td {
     text-align: center;
     vertical-align: middle;
 }
+
+.preview {
+    width: 150px;
+    height: auto;
+}
+
 .pagination {
   --bs-pagination-padding-x: 0.75rem;
     --bs-pagination-padding-y: 0.375rem;
