@@ -11,7 +11,7 @@ class Camera:
         self.rssi = -72
         self.username = "kismet"
         self.password = "kismet"
-        self.IP = "192.168.1.167"
+        self.IP = "localhost"
         self.count = 3
         self.camera = 0
         self.start_capture = False
