@@ -1,4 +1,4 @@
-Flask==2.2.2
+Flask==2.2.3
 Flask_Bootstrap==3.3.7.1
 flask_paginate==2022.1.8
 Flask_WTF==1.0.1
