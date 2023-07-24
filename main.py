@@ -162,7 +162,6 @@ def ignore():
     if form.validate_on_submit():
         with open("resources/ignore_list.csv", mode='a', encoding='utf8') as file:
             file.write(f"{form.mac.data}\n")
-        camera.seen_list.remove(form.mac.data)
         camera.retrieve_ignore_list()
         return redirect(url_for('ignore'))
     return render_template('ignore.html', form=form, ignorelist=items, pagination=pagination)
