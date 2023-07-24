@@ -125,10 +125,10 @@ def preview(filename):
 
 @app.route('/downloads/delete/<path:filename>', methods=['GET'])
 def delete(filename):
-    path = f'{camera.image_dir}/{filename}'
+    file = json.loads(filename)['filename']
+    path = f'{camera.image_dir}/{file}'
     os.remove(path)
-    print("Working")
-    return redirect(url_for('downloads'))
+    return f"{path} deleted."
 
 @app.route('/downloads/download_all', methods=['GET', 'POST'])
 def download_all():
