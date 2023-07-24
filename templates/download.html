@@ -28,8 +28,8 @@
                         <td>{{item}}</td>
                         <td><img class="preview" src="{{url_for('preview', filename=item)}}"/></td>
                         <td>
-                            <a class="btn btn-primary btn-sm download_option" href="{{ url_for('download_file', filename=item)}}">Download</a>
-                            <a class="btn btn-danger btn-sm download_option" href="{{url_for('delete', filename=item)}}">Delete</a>
+                            <a class="btn btn-primary btn-sm download_option" href="{{url_for('download_file', filename=item)}}" download="{{item}}">Download</a>
+                            <a class="btn btn-danger btn-sm delete_option" href="{{url_for('delete', filename=item)}}">Delete</a>
                         </td>
                     </tr>
                     {% endfor %}
@@ -38,4 +38,6 @@
         </div>
     {{ pagination.links }}
     <script src="{{ url_for('static', filename='js/bootstrap.min.js')}}"> </script>
+    <script src="{{ url_for('static', filename='js/jquery.js')}}"> </script>
+    <script src="{{ url_for('static', filename='js/index.js')}}"> </script>
 </body>

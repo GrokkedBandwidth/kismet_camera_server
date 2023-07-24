@@ -7,6 +7,7 @@ import zipfile
 import time
 import cv2
 import os
+import json
 from camera import Camera
 
 camera = Camera()
@@ -122,10 +123,11 @@ def preview(filename):
     path = f'{camera.image_dir}/{filename}'
     return send_file(path_or_file=path, mimetype='image/jpeg')
 
-@app.route('/downloads/delete/<path:filename>', methods=['GET', 'POST'])
+@app.route('/downloads/delete/<path:filename>', methods=['GET'])
 def delete(filename):
     path = f'{camera.image_dir}/{filename}'
     os.remove(path)
+    print("Working")
     return redirect(url_for('downloads'))
 
 @app.route('/downloads/download_all', methods=['GET', 'POST'])
