@@ -1,17 +1,20 @@
 from flask import Flask, render_template, Response, redirect, url_for, request, send_file
 from flask_paginate import Pagination
 from flask_bootstrap import Bootstrap
-from forms import CreateKismetForm
+from forms import CreateKismetForm, AddIgnoreMac
 from datetime import datetime as dt
 import zipfile
 import time
 import cv2
 import os
 import json
+import csv
 from camera import Camera
 
 camera = Camera()
 camera.check_resolution()
+camera.retrieve_ignore_list()
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'isdbnfgsijdgnkljang9248921ubpfjna0u32nf30qip'
 app.config['IMAGES'] = camera.image_dir
@@ -143,6 +146,35 @@ def delete_all():
     for file in os.listdir(camera.image_dir):
         os.remove(f'{camera.image_dir}/{file}')
     return redirect(url_for('downloads'))
+
+@app.route('/ignore', methods=['GET', 'POST'])
+def ignore():
+    page = int(request.args.get('page', 1))
+    per_page = 24
+    offset = (page - 1) * per_page
+    items = camera.seen_list[offset:offset+per_page]
+    if items:
+        items.sort()
+    pagination = Pagination(page=page, per_page=per_page, offset=offset, total=len(camera.seen_list),
+                            record_name='ignorelist')
+    form = AddIgnoreMac()
+    form.mac.render_kw = {'placeholder': 'CA:FE:DE:AD:BE:EF'}
+    if form.validate_on_submit():
+        with open("resources/ignore_list.csv", mode='a', encoding='utf8') as file:
+            file.write(f"{form.mac.data}\n")
+        camera.seen_list.remove(form.mac.data)
+        camera.retrieve_ignore_list()
+        return redirect(url_for('ignore'))
+    return render_template('ignore.html', form=form, ignorelist=items, pagination=pagination)
+
+@app.route('/ignore/<string:mac>')
+def add_ignore(mac):
+    tmp_mac = json.loads(mac)['mac']
+    with open("resources/ignore_list.csv", mode='a', encoding='utf8') as file:
+        file.write(f"{tmp_mac}\n")
+    camera.seen_list.remove(tmp_mac)
+    camera.retrieve_ignore_list()
+    return redirect(url_for('ignore'))
 
 @app.route('/video_feed')
 def video_feed():

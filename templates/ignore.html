@@ -1,10 +1,42 @@
-<!DOCTYPE html>
+{% include "header.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
+    <body>
+    <div class="ignore-container">
+        <div class="title-header title-container">
+            <h3>Ignore List</h3>
+        </div>
+    </div>
+    <div class="add-ignore-container">
+        {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+    </div>
+    <div class="seen-list-container">
+        {{ pagination.info }}
+        {{ pagination.links }}
+           <div class="table-responsive">
+            <table class="table table-dark table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Currently Seen MACs</th>
+                        <th>Add MAC to Ignore List</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in ignorelist %}
+                    <tr>
+                        <td>{{item}}</td>
+                        <td><a class="btn btn-primary ignore_option" href="{{url_for('add_ignore', mac=item)}}">Add</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {{ pagination.links }}
+
+
+    </div>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js')}}"> </script>
+    <script src="{{ url_for('static', filename='js/jquery.js')}}"> </script>
+    <script src="{{ url_for('static', filename='js/index.js')}}"> </script>
+    </body>
 </html>

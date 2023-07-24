@@ -33,6 +33,15 @@ class Camera:
                 "kismet.device.base.last_time"
             ]
         }
+        self.ignore_list = []
+        self.seen_list = []
+
+    def retrieve_ignore_list(self):
+        temp_ignore_list = []
+        with open('resources/ignore_list.csv', mode='r') as file:
+            for item in file:
+                temp_ignore_list.append(item.replace('\n', ''))
+        self.ignore_list = temp_ignore_list
 
     def check_resolution(self):
         working_resolutions = {}
@@ -65,9 +74,10 @@ class Camera:
             if rssi >= self.rssi \
                     and rssi != 0 \
                     and item['kismet.device.base.type'] != aps \
-                    and time.time() - last_seen_time <= 30:
+                    and time.time() - last_seen_time <= 30 \
+                    and item["kismet.device.base.macaddr"] not in self.ignore_list:
                 rssi_above_target = True
-                mac = item['kismet.device.base.macaddr'].replace(':', '')
+                mac = item['kismet.device.base.macaddr']
                 device_type = item['kismet.device.base.type']
                 mac_list.append([mac, device_type, rssi])
         if rssi_above_target:
@@ -91,5 +101,7 @@ class Camera:
                 for item in mac_list:
                     item.append(name)
                     writer.writerow(item)
+                    if item[0] not in self.seen_list:
+                        self.seen_list.append(item[0])
 
 
