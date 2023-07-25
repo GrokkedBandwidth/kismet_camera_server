@@ -8,7 +8,6 @@ import time
 import cv2
 import os
 import json
-import csv
 from camera import Camera
 
 camera = Camera()
@@ -25,7 +24,6 @@ def gen_frames():
         check, frame = camera.cap.read()
         if camera.start_capture:
             if camera.motion_detection:
-                motion = 0
                 gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
                 gray = cv2.GaussianBlur(gray, (21, 21), 0)
                 if camera.static_back is None:
@@ -39,7 +37,6 @@ def gen_frames():
                 for contour in cnts:
                     if cv2.contourArea(contour) < camera.sensitivity:
                         continue
-                    motion = 1
                     (x, y, w, h) = cv2.boundingRect(contour)
                     cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 3)
                     if time.time() > 2.5 + camera.last_api_call:
@@ -185,7 +182,7 @@ def lock_channel(uuid, channel):
     camera.lock_channel(uuid, channel)
     return redirect(url_for('channel_options'))
 
-@app.route('/channels/hop/<string:uuid>/<string:option>', methods=['GET'] )
+@app.route('/channels/hop/<string:uuid>/<string:option>', methods=['GET'])
 def survey_channels(uuid, option):
     match option:
         case "one":

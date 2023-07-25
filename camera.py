@@ -63,7 +63,6 @@ class Camera:
         self.url = f"http://{self.username}:{self.password}@{self.IP}:2501/"
 
     def get_interfaces(self):
-        interface_list = []
         results = requests.post(
             url=f"{self.url}datasource/all_sources.json",
             json=self.source_params).json()
@@ -160,5 +159,3 @@ class Camera:
                     writer.writerow(item)
                     if item[0] not in self.seen_list:
                         self.seen_list.append(item[0])
-
-
