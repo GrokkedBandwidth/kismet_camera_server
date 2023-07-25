@@ -8,7 +8,7 @@
         </div>
         <div class="interface-container">
             {% for item in channels %}
-                <h4>{{item['kismet.datasource.uuid']}}</h4>
+                <h4>{{item['kismet.datasource.interface']}}</h4>
                 <div class="selection-container">
                     {% for num in item['kismet.datasource.channels'] %}
                         {% if num in item['kismet.datasource.hop_channels'] and item['kismet.datasource.hopping'] == 1 %}
