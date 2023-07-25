@@ -26,7 +26,8 @@
                     {% if '36' in item['kismet.datasource.channels'] %}
                         <a class="btn btn-primary pre-select" href="{{ url_for('survey_channels', uuid=item['kismet.datasource.uuid'], option='three')}}">5 GHz (No HT)</a>
                     {% endif %}
-                    <a class="btn btn-primary pre-select" href="{{ url_for('survey_channels', uuid=item['kismet.datasource.uuid'], option='four')}}">All (No HT)</a>
+                    <a class="btn btn-primary pre-select" href="{{ url_for('survey_channels', uuid=item['kismet.datasource.uuid'], option='four')}}">All</a>
+
                 </div>
             {% endfor %}
         </div>
