@@ -253,7 +253,6 @@ def set_count():
 def set_camera():
     cv2.destroyAllWindows()
     camera.camera = int(request.form['camera'])
-    print(camera.camera)
     camera.check_resolution()
     camera.cap = cv2.VideoCapture(camera.camera)
     camera.width = 640

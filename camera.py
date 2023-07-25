@@ -60,11 +60,12 @@ class Camera:
         self.ignore_list = []
         self.seen_list = []
         self.interfaces = []
+        self.url = f"http://{self.username}:{self.password}@{self.IP}:2501/"
 
     def get_interfaces(self):
         interface_list = []
         results = requests.post(
-            url=f"http://{self.username}:{self.password}@{self.IP}:2501/datasource/all_sources.json",
+            url=f"{self.url}datasource/all_sources.json",
             json=self.source_params).json()
         self.interfaces = results
 
@@ -80,16 +81,16 @@ class Camera:
                         'hoprate': 5
                     }
                     requests.post(
-                        url=f"http://{self.username}:{self.password}@{self.IP}:2501/datasource/by-uuid/{uuid}/set_channel.cmd",
+                        url=f"{self.url}datasource/by-uuid/{uuid}/set_channel.cmd",
                         json=params)
         else:
             requests.post(
-                url=f"http://{self.username}:{self.password}@{self.IP}:2501/datasource/by-uuid/{uuid}/set_channel.cmd",
+                url=f"{self.url}datasource/by-uuid/{uuid}/set_channel.cmd",
                 json=span)
 
     def lock_channel(self, uuid, channel):
         requests.post(
-            url=f"http://{self.username}:{self.password}@{self.IP}:2501/datasource/by-uuid/{uuid}/set_channel.cmd",
+            url=f"{self.url}datasource/by-uuid/{uuid}/set_channel.cmd",
             json={'channel': channel})
 
     def retrieve_ignore_list(self):
@@ -120,7 +121,7 @@ class Camera:
         else:
             aps = 'Wi-Fi AP'
         results = requests.post(
-            url=f"http://{self.username}:{self.password}@{self.IP}:2501/devices/views/phy-IEEE802.11/devices.json",
+            url=f"{self.url}devices/views/phy-IEEE802.11/devices.json",
             json=self.params).json()
         mac_list = []
         rssi_above_target = False
