@@ -1,0 +1,37 @@
+{% include "header.html" %}
+<html lang="en">
+    <body>
+        <div class="channels-container">
+            <div class="title-header title-container">
+                <h3>Channel Options</h3>
+            </div>
+        </div>
+        <div class="interface-container">
+            {% for item in channels %}
+                <h4>{{item['kismet.datasource.uuid']}}</h4>
+                <div class="selection-container">
+                    {% for num in item['kismet.datasource.channels'] %}
+                        {% if num in item['kismet.datasource.hop_channels'] and item['kismet.datasource.hopping'] == 1 %}
+                            <a class="btn btn-primary channel" href="{{ url_for('lock_channel', uuid=item['kismet.datasource.uuid'], channel=num)}}">{{num}}</a>
+                        {% elif item['kismet.datasource.hopping'] == 0 and item['kismet.datasource.channel'] == num %}
+                            <a class="btn btn-primary channel" href="{{ url_for('lock_channel', uuid=item['kismet.datasource.uuid'], channel=num)}}">{{num}}</a>
+                        {% else %}
+                            <a class="btn btn-outline-primary channel" href="{{ url_for('lock_channel', uuid=item['kismet.datasource.uuid'], channel=num)}}">{{num}}</a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="pre-select-options">
+                    <a class="btn btn-primary pre-select" href="{{ url_for('survey_channels', uuid=item['kismet.datasource.uuid'], option='one')}}">1, 6, 11</a>
+                    <a class="btn btn-primary pre-select" href="{{ url_for('survey_channels', uuid=item['kismet.datasource.uuid'], option='two')}}">2 GHz (No HT)</a>
+                    {% if '36' in item['kismet.datasource.channels'] %}
+                        <a class="btn btn-primary pre-select" href="{{ url_for('survey_channels', uuid=item['kismet.datasource.uuid'], option='three')}}">5 GHz (No HT)</a>
+                    {% endif %}
+                    <a class="btn btn-primary pre-select" href="{{ url_for('survey_channels', uuid=item['kismet.datasource.uuid'], option='four')}}">All (No HT)</a>
+                </div>
+            {% endfor %}
+        </div>
+        <script src="{{ url_for('static', filename='js/bootstrap.min.js')}}"> </script>
+        <script src="{{ url_for('static', filename='js/jquery.js')}}"> </script>
+        <script src="{{ url_for('static', filename='js/index.js')}}"> </script>
+    </body>
+</html>

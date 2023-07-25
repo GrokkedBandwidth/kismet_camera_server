@@ -175,6 +175,32 @@ def add_ignore(mac):
     camera.retrieve_ignore_list()
     return redirect(url_for('ignore'))
 
+@app.route('/channels')
+def channel_options():
+    camera.get_interfaces()
+    return render_template('channels.html', channels=camera.interfaces)
+
+@app.route('/channels/<string:uuid>/<string:channel>', methods=['GET'])
+def lock_channel(uuid, channel):
+    camera.lock_channel(uuid, channel)
+    return redirect(url_for('channel_options'))
+
+@app.route('/channels/hop/<string:uuid>/<string:option>', methods=['GET'] )
+def survey_channels(uuid, option):
+    match option:
+        case "one":
+            camera.survey_channels(uuid=uuid, span=camera.one_six_eleven_params)
+        case "two":
+            camera.survey_channels(uuid=uuid, span=camera.two_full_params)
+        case "three":
+            camera.survey_channels(uuid=uuid, span=camera.five_full_params)
+        case "four":
+            camera.survey_channels(uuid=uuid, span="all")
+        case _:
+            pass
+    return redirect(url_for('channel_options'))
+
+
 @app.route('/video_feed')
 def video_feed():
     return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
