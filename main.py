@@ -8,6 +8,7 @@ import time
 import cv2
 import os
 import json
+import threading
 from camera import Camera
 
 camera = Camera()
@@ -19,7 +20,7 @@ app.config['SECRET_KEY'] = 'isdbnfgsijdgnkljang9248921ubpfjna0u32nf30qip'
 app.config['IMAGES'] = camera.image_dir
 Bootstrap(app)
 
-def gen_frames():
+def background_process():
     while True:
         check, frame = camera.cap.read()
         if camera.start_capture:
@@ -57,12 +58,25 @@ def gen_frames():
                 ret, buffer = cv2.imencode('.jpg', cv2.rotate(frame, cv2.ROTATE_180))
             elif camera.rotation == 270:
                 ret, buffer = cv2.imencode('.jpg', cv2.rotate(frame, cv2.ROTATE_90_COUNTERCLOCKWISE))
-            frame = buffer.tobytes()
-            if camera.stream:
-                yield (b'--frame\r\n'
-                       b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-            else:
-                pass
+
+
+def gen_frames():
+    while True:
+        check, frame = camera.cap.read()
+        if camera.rotation == 0:
+            ret, buffer = cv2.imencode('.jpg', frame)
+        elif camera.rotation == 90:
+            ret, buffer = cv2.imencode('.jpg', cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE))
+        elif camera.rotation == 180:
+            ret, buffer = cv2.imencode('.jpg', cv2.rotate(frame, cv2.ROTATE_180))
+        elif camera.rotation == 270:
+            ret, buffer = cv2.imencode('.jpg', cv2.rotate(frame, cv2.ROTATE_90_COUNTERCLOCKWISE))
+        frame = buffer.tobytes()
+        if camera.stream:
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+        else:
+            pass
 
 @app.route('/', methods=['POST', 'GET'])
 def home():
@@ -281,6 +295,9 @@ def manual_photo():
                     cv2.rotate(image, cv2.ROTATE_90_COUNTERCLOCKWISE))
     return redirect(url_for('home'))
 
+
+thread1 = threading.Thread(target=background_process)
+thread1.start()
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
