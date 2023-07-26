@@ -198,17 +198,15 @@ def lock_channel(uuid, channel):
 
 @app.route('/channels/hop/<string:uuid>/<string:option>', methods=['GET'])
 def survey_channels(uuid, option):
-    match option:
-        case "one":
-            camera.survey_channels(uuid=uuid, span=camera.one_six_eleven_params)
-        case "two":
-            camera.survey_channels(uuid=uuid, span=camera.two_full_params)
-        case "three":
-            camera.survey_channels(uuid=uuid, span=camera.five_full_params)
-        case "four":
-            camera.survey_channels(uuid=uuid, span="all")
-        case _:
-            pass
+    if option == "one":
+        camera.survey_channels(uuid=uuid, span=camera.one_six_eleven_params)
+    elif option == "two":
+        camera.survey_channels(uuid=uuid, span=camera.two_full_params)
+    elif option == "three":
+        camera.survey_channels(uuid=uuid, span=camera.five_full_params)
+    elif option == "four":
+        camera.survey_channels(uuid=uuid, span="all")
+
     return redirect(url_for('channel_options'))
 
 
