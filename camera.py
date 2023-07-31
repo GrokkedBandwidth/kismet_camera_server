@@ -25,6 +25,8 @@ class Camera:
         self.static_back = None
         self.last_api_call = 0
         self.cap = cv2.VideoCapture(self.camera)
+        self.check = ""
+        self.frame = []
         self.params = {
             'fields': [
                 "kismet.device.base.signal/kismet.common.signal.last_signal",
@@ -113,6 +115,9 @@ class Camera:
                 width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
                 working_resolutions[str(width) + " x " + str(height)] = "OK"
         self.resolutions = working_resolutions
+
+    def update_frames(self):
+        self.check, self.frame = self.cap.read()
 
     def api_call(self):
         if self.grab_aps:
