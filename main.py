@@ -22,10 +22,10 @@ Bootstrap(app)
 
 def background_process():
     while True:
-        check, frame = camera.cap.read()
+        camera.update_frames()
         if camera.start_capture:
             if camera.motion_detection:
-                gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+                gray = cv2.cvtColor(camera.frame, cv2.COLOR_BGR2GRAY)
                 gray = cv2.GaussianBlur(gray, (21, 21), 0)
                 if camera.static_back is None:
                     camera.static_back = gray
@@ -39,7 +39,7 @@ def background_process():
                     if cv2.contourArea(contour) < camera.sensitivity:
                         continue
                     (x, y, w, h) = cv2.boundingRect(contour)
-                    cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 3)
+                    cv2.rectangle(camera.frame, (x, y), (x + w, y + h), (0, 255, 0), 3)
                     if time.time() > 2.5 + camera.last_api_call:
                         camera.last_api_call = time.time()
                         camera.api_call()
@@ -47,34 +47,33 @@ def background_process():
                 if time.time() > 2.5 + camera.last_api_call:
                     camera.last_api_call = time.time()
                     camera.api_call()
-        if not check:
+        if not camera.check:
             break
         else:
             if camera.rotation == 0:
-                ret, buffer = cv2.imencode('.jpg', frame)
+                ret, buffer = cv2.imencode('.jpg', camera.frame)
             elif camera.rotation == 90:
-                ret, buffer = cv2.imencode('.jpg', cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE))
+                ret, buffer = cv2.imencode('.jpg', cv2.rotate(camera.frame, cv2.ROTATE_90_CLOCKWISE))
             elif camera.rotation == 180:
-                ret, buffer = cv2.imencode('.jpg', cv2.rotate(frame, cv2.ROTATE_180))
+                ret, buffer = cv2.imencode('.jpg', cv2.rotate(camera.frame, cv2.ROTATE_180))
             elif camera.rotation == 270:
-                ret, buffer = cv2.imencode('.jpg', cv2.rotate(frame, cv2.ROTATE_90_COUNTERCLOCKWISE))
+                ret, buffer = cv2.imencode('.jpg', cv2.rotate(camera.frame, cv2.ROTATE_90_COUNTERCLOCKWISE))
 
 
 def gen_frames():
     while True:
-        check, frame = camera.cap.read()
         if camera.rotation == 0:
-            ret, buffer = cv2.imencode('.jpg', frame)
+            ret, buffer = cv2.imencode('.jpg', camera.frame)
         elif camera.rotation == 90:
-            ret, buffer = cv2.imencode('.jpg', cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE))
+            ret, buffer = cv2.imencode('.jpg', cv2.rotate(camera.frame, cv2.ROTATE_90_CLOCKWISE))
         elif camera.rotation == 180:
-            ret, buffer = cv2.imencode('.jpg', cv2.rotate(frame, cv2.ROTATE_180))
+            ret, buffer = cv2.imencode('.jpg', cv2.rotate(camera.frame, cv2.ROTATE_180))
         elif camera.rotation == 270:
-            ret, buffer = cv2.imencode('.jpg', cv2.rotate(frame, cv2.ROTATE_90_COUNTERCLOCKWISE))
-        frame = buffer.tobytes()
+            ret, buffer = cv2.imencode('.jpg', cv2.rotate(camera.frame, cv2.ROTATE_90_COUNTERCLOCKWISE))
+        picture = buffer.tobytes()
         if camera.stream:
             yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+                   b'Content-Type: image/jpeg\r\n\r\n' + picture + b'\r\n')
         else:
             pass
 
@@ -198,17 +197,14 @@ def lock_channel(uuid, channel):
 
 @app.route('/channels/hop/<string:uuid>/<string:option>', methods=['GET'])
 def survey_channels(uuid, option):
-    match option:
-        case "one":
-            camera.survey_channels(uuid=uuid, span=camera.one_six_eleven_params)
-        case "two":
-            camera.survey_channels(uuid=uuid, span=camera.two_full_params)
-        case "three":
-            camera.survey_channels(uuid=uuid, span=camera.five_full_params)
-        case "four":
-            camera.survey_channels(uuid=uuid, span="all")
-        case _:
-            pass
+    if option == "one":
+        camera.survey_channels(uuid=uuid, span=camera.one_six_eleven_params)
+    elif option == "two":
+        camera.survey_channels(uuid=uuid, span=camera.two_full_params)
+    elif option == "three":
+        camera.survey_channels(uuid=uuid, span=camera.five_full_params)
+    elif option == "four":
+        camera.survey_channels(uuid=uuid, span="all")
     return redirect(url_for('channel_options'))
 
 
