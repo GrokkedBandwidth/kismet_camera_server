@@ -68,15 +68,13 @@ class Camera:
         results = requests.post(
             url=f"{self.url}datasource/all_sources.json",
             json=self.source_params).json()
+
         self.interfaces = results
 
     def survey_channels(self, uuid, span):
         if span == "all":
             for item in self.interfaces:
-                print(item)
                 if item['kismet.datasource.uuid'] == uuid:
-                    print(f"working")
-                    print(item['kismet.datasource.channels'])
                     params = {
                         'channels': item['kismet.datasource.channels'],
                         'hoprate': 5
