@@ -43,6 +43,7 @@ https://www.youtube.com/watch?v=QzVYnG-WaM4&ab_channel=SamWestbyTech
 sudo apt update
 sudo apt upgrade -y
 sudo apt install -y build-essential cmake pkg-config libjpeg-dev libtiff5-dev libpng-dev libavcodec-dev libavformat-dev libswscale-dev libv4l-dev libxvidcore-dev libx264-dev libfontconfig1-dev libcairo2-dev libgdk-pixbuf2.0-dev libpango1.0-dev libgtk2.0-dev libgtk-3-dev libatlas-base-dev gfortran libhdf5-dev libhdf5-serial-dev libhdf5-103 libqt5gui5 libqt5webkit5 libqt5test5 python3-pyqt5 python3-dev libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libnotify4 libhdf5-dev libhdf5-serial-dev libatlas-base-dev libjasper-dev libatlas-base-dev libhdf5-dev
+sudo apt install -y libatlas-base-dev
 sudo rm -rf /usr/lib/python3.11/EXTERNALLY-MANAGED
 git clone https://github.com/GrokkedBandwidth/kismet_camera_server.git
 cd kismet_camera_server/
